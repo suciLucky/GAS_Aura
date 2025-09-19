@@ -19,7 +19,7 @@ protected:
 
 	virtual void BeginPlay() override;
 
-
+//创建武器
 	UPROPERTY(EditAnywhere,Category="Combat")
 	TObjectPtr<USkeletalMeshComponent> Weapon;
 
