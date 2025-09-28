@@ -35,7 +35,7 @@ private:
 	UPROPERTY(EditAnywhere,Category="Input")
 	TObjectPtr<UInputAction> MoveAction;
 
-	void Move(const FInputActionValue& InputActionValue);//移动
+	void Move(const FInputActionValue& InputActionValue) ;//移动
 	void CursorTrace();//追踪鼠标
 
 	//查询上一帧和当前帧鼠标下的Actor

@@ -15,6 +15,11 @@ AAuraCharacterBase::AAuraCharacterBase()
 	
 
 }
+//获取技能组件函数的定义
+UAbilitySystemComponent* AAuraCharacterBase::GetAbilitySystemComponent() const
+{
+	return AbilitySystemComponent;
+}
 
 
 void AAuraCharacterBase::BeginPlay()

@@ -16,8 +16,13 @@ class AURA_API AAuraEnemy : public AAuraCharacterBase,public IEnemyInterface//�
 	GENERATED_BODY()
 public:
 	AAuraEnemy();
+
+	//重写接口的函数
 	virtual void HighlightActor() override;
 	virtual void UnHighlightActor() override;
+	
+protected:
+	virtual void BeginPlay() override;
 
 		
 };

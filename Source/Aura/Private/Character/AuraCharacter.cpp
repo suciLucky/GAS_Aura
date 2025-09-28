@@ -18,3 +18,28 @@ AAuraCharacter::AAuraCharacter()
 	bUseControllerRotationRoll=false;
 	bUseControllerRotationYaw=false;
 }
+
+void AAuraCharacter::PossessedBy(AController* NewController)
+{
+	Super::PossessedBy(NewController);
+
+	//Init Ability Actor Info for the Server
+	InitAbilityActorInfo();	
+}
+
+void AAuraCharacter::OnRep_PlayerState()
+{
+	Super::OnRep_PlayerState();
+
+	//Init Ability Actor Info for the Client
+	InitAbilityActorInfo();	
+}
+
+void AAuraCharacter::InitAbilityActorInfo()
+{
+	AAuraPlayerState*AuraPlayerState=GetPlayerState<AAuraPlayerState>();
+	AuraPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(AuraPlayerState,this);
+	//初始化Aura的组件和属性
+	AbilitySystemComponent=AuraPlayerState->GetAbilitySystemComponent();
+	AttributeSet=AuraPlayerState->GetAttributeSet();
+}

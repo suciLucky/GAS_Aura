@@ -8,6 +8,7 @@
 AAuraPlayerController::AAuraPlayerController()
 {
 	bReplicates = true;//可复制
+	LastActor=ThisActor=nullptr;
 }
 
 void AAuraPlayerController::PlayerTick(float DeltaTime)
@@ -87,7 +88,7 @@ void AAuraPlayerController::SetupInputComponent()
 	
 }
 
-void AAuraPlayerController::Move(const FInputActionValue& InputActionValue)
+void AAuraPlayerController::Move(const FInputActionValue& InputActionValue) 
 {
 	const FVector2d InputAxisVector=InputActionValue.Get<FVector2d>();
 	const FRotator Rotation=GetControlRotation();//获取了控制器当前的旋转值。在游戏中，这通常就等同于玩家摄像机的朝向。	
