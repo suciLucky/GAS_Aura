@@ -23,12 +23,12 @@ public:
 	AAuraPlayerState();
 
 	//重写接口里的获取技能组件函数，声明获取AttributeSet函数
-	virtual UAuraAbilitySystemComponent* GetAbilitySystemComponent() const override;
+	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	UAttributeSet*GetAttributeSet() const {return AttributeSet;}
 protected:
 	//创建AbilitySystemComponent和AttributeSet
 	UPROPERTY()
-	TObjectPtr<UAuraAbilitySystemComponent>AbilitySystemComponent;
+	TObjectPtr<UAbilitySystemComponent>AbilitySystemComponent;
 
 	UPROPERTY()
 	TObjectPtr<UAttributeSet>AttributeSet;

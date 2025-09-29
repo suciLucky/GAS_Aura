@@ -33,7 +33,7 @@ protected:
 	
 	//创建AbilitySystemComponent和AttributeSet（给Enemy使用，在Enemy中定义）
 	UPROPERTY()
-	TObjectPtr<UAuraAbilitySystemComponent>AbilitySystemComponent;
+	TObjectPtr<UAbilitySystemComponent>AbilitySystemComponent;
 
 	UPROPERTY()
 	TObjectPtr<UAttributeSet>AttributeSet;

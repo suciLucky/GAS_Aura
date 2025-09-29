@@ -3,6 +3,8 @@
 
 #include "Character/AuraCharacter.h"
 
+#include <iostream>
+
 #include "GameFramework/CharacterMovementComponent.h"
 
 AAuraCharacter::AAuraCharacter()
@@ -39,7 +41,10 @@ void AAuraCharacter::InitAbilityActorInfo()
 {
 	AAuraPlayerState*AuraPlayerState=GetPlayerState<AAuraPlayerState>();
 	AuraPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(AuraPlayerState,this);
+	
 	//初始化Aura的组件和属性
 	AbilitySystemComponent=AuraPlayerState->GetAbilitySystemComponent();
 	AttributeSet=AuraPlayerState->GetAttributeSet();
+
+	
 }

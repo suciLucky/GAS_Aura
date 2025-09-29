@@ -4,6 +4,7 @@
 #include "Player/AuraPlayerState.h"
 
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
+#include "AbilitySystem/AuraAttributeSet.h"
 
 AAuraPlayerState::AAuraPlayerState()
 {
@@ -11,7 +12,7 @@ AAuraPlayerState::AAuraPlayerState()
 	AbilitySystemComponent=CreateDefaultSubobject<UAuraAbilitySystemComponent>("AbilitySystemComponent");
 	AbilitySystemComponent->SetIsReplicated(true);
 	
-	AttributeSet=CreateDefaultSubobject<UAttributeSet>("AttributeSet");
+	AttributeSet=CreateDefaultSubobject<UAuraAttributeSet>("AttributeSet");
 	
 	//设置玩家的复制模式为Mixed，意味着Gameplay Effects are	replicated to the owning client only. Gameplay Cues and Gameplay Tags replicated to all clients.
 	AbilitySystemComponent->SetReplicationMode(EGameplayEffectReplicationMode::Mixed);
