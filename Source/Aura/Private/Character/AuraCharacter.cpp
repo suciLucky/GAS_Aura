@@ -6,6 +6,8 @@
 #include <iostream>
 
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Player/AuraPlayerController.h"
+#include "UI/HUD/AuraHUD.h"
 
 AAuraCharacter::AAuraCharacter()
 {
@@ -39,6 +41,7 @@ void AAuraCharacter::OnRep_PlayerState()
 
 void AAuraCharacter::InitAbilityActorInfo()
 {
+	//初始化ASC的ActorInfo
 	AAuraPlayerState*AuraPlayerState=GetPlayerState<AAuraPlayerState>();
 	AuraPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(AuraPlayerState,this);
 	
@@ -46,5 +49,12 @@ void AAuraCharacter::InitAbilityActorInfo()
 	AbilitySystemComponent=AuraPlayerState->GetAbilitySystemComponent();
 	AttributeSet=AuraPlayerState->GetAttributeSet();
 
-	
+	//初始化HUD
+	if(AAuraPlayerController*AuraPlayerController=Cast<AAuraPlayerController>(GetController()))
+	{
+		if(AAuraHUD*AuraHUD=Cast<AAuraHUD>(AuraPlayerController->GetHUD()))
+		{
+			AuraHUD->InitOverlay(AuraPlayerController,AuraPlayerState,AbilitySystemComponent,AttributeSet);
+		}		
+	}	
 }

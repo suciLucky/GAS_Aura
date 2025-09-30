@@ -39,8 +39,8 @@ private:
 	void CursorTrace();//追踪鼠标
 
 	//查询上一帧和当前帧鼠标下的Actor
-	IEnemyInterface*LastActor;
-	IEnemyInterface*ThisActor;
+	TObjectPtr<IEnemyInterface>LastActor;
+	TObjectPtr<IEnemyInterface>ThisActor;
 	
 	
 	
