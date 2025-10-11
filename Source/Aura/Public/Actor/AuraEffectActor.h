@@ -75,4 +75,7 @@ protected:
 
 	//需要存储的已激活的GE
 	TMap<FActiveGameplayEffectHandle,UAbilitySystemComponent*> ActiveEffectHandles;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Apllied Effects")
+	float ActorLevel=1.f;
 };

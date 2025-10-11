@@ -21,7 +21,7 @@ public:
 	virtual void OnRep_PlayerState() override;
 
 protected:
-	void InitAbilityActorInfo();//初始化info
+	virtual void InitAbilityActorInfo() override;//初始化info
 	
 	
 };

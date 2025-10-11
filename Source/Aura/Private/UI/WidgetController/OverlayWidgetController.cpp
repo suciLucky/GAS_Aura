@@ -3,6 +3,8 @@
 
 #include "UI/WidgetController/OverlayWidgetController.h"
 
+#include "AbilitySystem/AuraAbilitySystemComponent.h"
+
 void UOverlayWidgetController::BroadcastInitialValues()
 {
 	const UAuraAttributeSet *AuraAttributeSet=CastChecked<UAuraAttributeSet>(AttributeSet);
@@ -30,6 +32,14 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
 
 	AbilitySystemComponent->GetGameplayAttributeValueChangeDelegate(AuraAttributeSet->GetMaxManaAttribute())
 	.AddUObject(this,&UOverlayWidgetController::MaxManaChanged);
+
+	Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent)->EffectAssetTags.AddLambda(
+    [](const FGameplayTagContainer& AssetTagContainer)
+    {
+	
+    }	
+
+	);
 
 }
 

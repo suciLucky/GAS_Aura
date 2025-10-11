@@ -44,6 +44,7 @@ void AAuraCharacter::InitAbilityActorInfo()
 	//初始化ASC的ActorInfo
 	AAuraPlayerState*AuraPlayerState=GetPlayerState<AAuraPlayerState>();
 	AuraPlayerState->GetAbilitySystemComponent()->InitAbilityActorInfo(AuraPlayerState,this);
+	Cast<UAuraAbilitySystemComponent>(AuraPlayerState->GetAbilitySystemComponent())->AbilityActorInfoSet();
 	
 	//初始化Aura的组件和属性
 	AbilitySystemComponent=AuraPlayerState->GetAbilitySystemComponent();

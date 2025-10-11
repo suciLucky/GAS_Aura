@@ -23,10 +23,18 @@ AAuraEnemy::AAuraEnemy()
 void AAuraEnemy::BeginPlay()
 {
 	Super::BeginPlay();
+	InitAbilityActorInfo();
 	
-	AbilitySystemComponent->InitAbilityActorInfo(this,this);
+	
 	
 }
+
+void AAuraEnemy::InitAbilityActorInfo()
+{
+	AbilitySystemComponent->InitAbilityActorInfo(this,this);
+	Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent)->AbilityActorInfoSet();
+}
+
 /**关卡使用无限大的后期处理体积，在后期处理材质添加物体高亮材质（基于自定义深度模板通道），设置需要高亮物体的RenderCustomDepth
 *和CustomDepthStencilValue来控制高亮
 **/
