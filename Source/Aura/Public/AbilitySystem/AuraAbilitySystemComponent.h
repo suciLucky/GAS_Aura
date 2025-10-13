@@ -24,6 +24,6 @@ public:
 protected:
 
 	//GE生效时的回调函数，通过多播委托绑定
-	void EffectApplied( UAbilitySystemComponent*AbilitySystemComponent, const FGameplayEffectSpec&EffectSpec, FActiveGameplayEffectHandle ActiveEffectHandle);
+	void EffectApplied( UAbilitySystemComponent*AbilitySystemComponent, const FGameplayEffectSpec&EffectSpec, FActiveGameplayEffectHandle ActiveEffectHandle)const;
 	
 };
