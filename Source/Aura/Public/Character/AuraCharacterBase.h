@@ -40,4 +40,11 @@ protected:
 
 	virtual void InitAbilityActorInfo();//初始化info
 
+	//用于初始化属性值的GE
+	UPROPERTY(BlueprintReadOnly,EditAnywhere,Category="Attributes")
+	TSubclassOf<UGameplayEffect> DefaultPrimaryAttributes;
+
+	//应用初始化属性GE的函数
+	void InitializePrimaryAttributes() const;
+
 };
