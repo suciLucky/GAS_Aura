@@ -5,6 +5,7 @@
 
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
 #include "AbilitySystem/AuraAttributeSet.h"
+#include "Net/UnrealNetwork.h"
 
 AAuraPlayerState::AAuraPlayerState()
 {
@@ -20,8 +21,20 @@ AAuraPlayerState::AAuraPlayerState()
 	NetUpdateFrequency=100.f; //服务器向所有客户端更新数据的频率
 }
 
+void AAuraPlayerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
+{
+	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
+
+	//注册
+	DOREPLIFETIME(AAuraPlayerState,Level);
+}
+
 //获取技能组件函数的定义
 UAbilitySystemComponent* AAuraPlayerState::GetAbilitySystemComponent() const
 {
 	return AbilitySystemComponent;
+}
+
+void AAuraPlayerState::OnRep_Level(int32 OldLevel)
+{
 }

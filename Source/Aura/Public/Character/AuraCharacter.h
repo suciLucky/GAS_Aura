@@ -4,7 +4,6 @@
 
 #include "CoreMinimal.h"
 #include "Character/AuraCharacterBase.h"
-#include "Player/AuraPlayerState.h"
 #include "AuraCharacter.generated.h"
 
 /**
@@ -19,6 +18,10 @@ public:
 
 	virtual void PossessedBy(AController* NewController) override;
 	virtual void OnRep_PlayerState() override;
+
+	/**Combat接口函数*/
+	virtual int32 GetPlayerLevel() override;
+	/** end Combat接口函数*/
 
 protected:
 	virtual void InitAbilityActorInfo() override;//初始化info

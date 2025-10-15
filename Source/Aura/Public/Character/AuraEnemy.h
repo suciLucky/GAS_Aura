@@ -17,14 +17,24 @@ class AURA_API AAuraEnemy : public AAuraCharacterBase,public IEnemyInterface//�
 public:
 	AAuraEnemy();
 
-	//重写接口的函数
+	/**Enemy接口函数*/
 	virtual void HighlightActor() override;
 	virtual void UnHighlightActor() override;
+	/** end Enemy接口函数*/
+
+	/**Combat接口函数*/
+	virtual int32 GetPlayerLevel() override;
+	/** end Combat接口函数*/
+
 	
 protected:
 	virtual void BeginPlay() override;
 
 	virtual void InitAbilityActorInfo() override;//初始化info
+
+	//等级
+	UPROPERTY(EditAnywhere, BlueprintReadOnly,Category="Character Class Default")
+	int32 Level=1;
 
 		
 };

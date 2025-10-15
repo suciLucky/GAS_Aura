@@ -2,10 +2,8 @@
 
 
 #include "Character/AuraCharacter.h"
-
-#include <iostream>
-
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Player/AuraPlayerState.h"
 #include "Player/AuraPlayerController.h"
 #include "UI/HUD/AuraHUD.h"
 
@@ -39,6 +37,13 @@ void AAuraCharacter::OnRep_PlayerState()
 	InitAbilityActorInfo();	
 }
 
+int32 AAuraCharacter::GetPlayerLevel()
+{
+	const AAuraPlayerState*AuraPlayerState=GetPlayerState<AAuraPlayerState>();
+	check(AuraPlayerState)
+	return AuraPlayerState->GetPlayerLevel();
+}
+
 void AAuraCharacter::InitAbilityActorInfo()
 {
 	//初始化ASC的ActorInfo
@@ -58,6 +63,6 @@ void AAuraCharacter::InitAbilityActorInfo()
 			AuraHUD->InitOverlay(AuraPlayerController,AuraPlayerState,AbilitySystemComponent,AttributeSet);
 		}		
 	}
-	//初始化Primary属性
-	InitializePrimaryAttributes();
+	//初始化属性
+	InitializeDefaultAttributes();
 }

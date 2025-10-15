@@ -6,13 +6,14 @@
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
 #include "AbilitySystemInterface.h"
 #include "GameFramework/Character.h"
+#include "Interaction/CombatInterface.h"
 #include "AuraCharacterBase.generated.h"
 
 class UAbilitySystemComponent;
 class UAttributeSet;
 
 UCLASS(Abstract)
-class AURA_API AAuraCharacterBase : public ACharacter,public IAbilitySystemInterface//接口
+class AURA_API AAuraCharacterBase : public ACharacter,public IAbilitySystemInterface,public ICombatInterface//接口
 {
 	GENERATED_BODY()
 
@@ -40,11 +41,23 @@ protected:
 
 	virtual void InitAbilityActorInfo();//初始化info
 
-	//用于初始化属性值的GE
+	//用于初始化Vital属性值的GE
+	UPROPERTY(BlueprintReadOnly,EditAnywhere,Category="Attributes")
+	TSubclassOf<UGameplayEffect> DefaultVitalAttributes;
+
+	
+	//用于初始化Primary属性值的GE
 	UPROPERTY(BlueprintReadOnly,EditAnywhere,Category="Attributes")
 	TSubclassOf<UGameplayEffect> DefaultPrimaryAttributes;
 
+	//用于初始化Secondary属性值的GE
+	UPROPERTY(BlueprintReadOnly,EditAnywhere,Category="Attributes")
+	TSubclassOf<UGameplayEffect> DefaultSecondaryAttributes;
+
 	//应用初始化属性GE的函数
-	void InitializePrimaryAttributes() const;
+	void InitializeDefaultAttributes() const;
+
+	//应用GE到自身的函数
+	void ApplyEffectToSelf(const TSubclassOf<UGameplayEffect>& GameplayEffectClass,const float& Level) const;
 
 };

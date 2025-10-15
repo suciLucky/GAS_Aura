@@ -32,6 +32,7 @@ void AAuraEffectActor::ApplyEffectToTarget(AActor* TargetActor, TSubclassOf<UGam
 	check(GameplayEffectClass);
 	//创建GE上下文
 	FGameplayEffectContextHandle EffectContextHandle =TargetASC->MakeEffectContext();
+	//设置源对象
 	EffectContextHandle.AddSourceObject(this);
 	//创建GE实例
 	const FGameplayEffectSpecHandle EffectSpecHandle = TargetASC->MakeOutgoingSpec(GameplayEffectClass,ActorLevel,EffectContextHandle);
