@@ -57,8 +57,7 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
     	for(auto Tag:AssetTagContainer)
     	{
     		//寻找Message类型的Tag
-    		FGameplayTag MessageTag=FGameplayTag::RequestGameplayTag(FName("Message"));
-    		if(Tag.MatchesTag(MessageTag))
+    		if(Tag.MatchesTag(FGameplayTag::RequestGameplayTag(FName("Message"))))
     		{
     			//使用该Tag从数据表找特定行，然后广播
     			const FUIWidgetRow* Row=GetDatatableRowByTag<FUIWidgetRow>(MessageWidgetDataTable,Tag);

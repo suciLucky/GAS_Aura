@@ -22,7 +22,7 @@ public:
 	TObjectPtr<UObject>WidgetController;
 
 protected:
-	//Controller已设置
+	//Controller已设置后调用
 	UFUNCTION(BlueprintImplementableEvent)
 	void WidgetControllerSet();
 	
