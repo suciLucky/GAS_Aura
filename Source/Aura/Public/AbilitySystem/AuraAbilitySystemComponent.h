@@ -21,9 +21,12 @@ public:
 
 	//广播AssetTags的委托
 	FEffectAssetTags EffectAssetTags;
+
+	void AddCharacterAbilities(const TArray<TSubclassOf<UGameplayAbility>>& StartupAbilities);
 protected:
 
 	//GE生效时的回调函数，通过多播委托绑定
+
 	void EffectApplied( UAbilitySystemComponent*AbilitySystemComponent, const FGameplayEffectSpec&EffectSpec, FActiveGameplayEffectHandle ActiveEffectHandle)const;
 	
 };

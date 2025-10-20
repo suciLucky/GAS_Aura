@@ -28,5 +28,9 @@ protected:
 	//蓝图中添加
 	UPROPERTY(EditDefaultsOnly)
 	TObjectPtr<UAttributeInfo> AttributeInfo;
+
+private:
+	//广播AttributeInfo
+	void BroadcastAttributeInfo(const FGameplayTag& GameplayTag,const FGameplayAttribute& GameplayAttribute) const;
 	
 };

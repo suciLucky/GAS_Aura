@@ -60,4 +60,11 @@ protected:
 	//应用GE到自身的函数
 	void ApplyEffectToSelf(const TSubclassOf<UGameplayEffect>& GameplayEffectClass,const float& Level) const;
 
+	void AddCharacterAbilities();
+private:
+
+	//初始Abilities列表
+	UPROPERTY(EditAnywhere,Category="Abilities")
+	TArray<TSubclassOf<UGameplayAbility>> StartupAbilities;
+
 };

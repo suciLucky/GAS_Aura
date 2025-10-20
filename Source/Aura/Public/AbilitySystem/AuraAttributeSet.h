@@ -48,6 +48,11 @@ struct FEffectProperties
 	UPROPERTY()
 	ACharacter*TargetCharacter=nullptr;	
 };
+
+//可以获取静态函数指针的通用模板，这里需要用来获取GetAttribute()的指针，例如GetStrengthAttribute();
+template<class T>
+using TStaticFuncPtr = typename TBaseStaticDelegateInstance<T,FDefaultDelegateUserPolicy>::FFuncPtr;
+
 /**
  * 
  */
@@ -67,6 +72,9 @@ public:
 
 	//GE生效后的执行函数，拥有所有相关数据
 	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
+
+	//用来存储Tag映射GetAttribute()指针
+	TMap<FGameplayTag,TStaticFuncPtr<FGameplayAttribute()>> TagToAttribute;
 
 	//创建可复制的变量，使用复制通知函数标记（Vital Attributes）
 	UPROPERTY(BlueprintReadOnly,ReplicatedUsing=OnRep_Health,Category="Vital Attributes")

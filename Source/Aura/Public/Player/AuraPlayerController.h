@@ -5,6 +5,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
+#include "Input/AuraInputConfig.h"
 #include "AuraPlayerController.generated.h"
 
 //声明
@@ -35,11 +36,19 @@ private:
 	UPROPERTY(EditAnywhere,Category="Input")
 	TObjectPtr<UInputAction> MoveAction;
 
-	void Move(const FInputActionValue& InputActionValue) ;//移动
+	void Move(const FInputActionValue& InputActionValue);//移动
 	void CursorTrace();//追踪鼠标
 
 	//查询上一帧和当前帧鼠标下的Actor
 	IEnemyInterface*LastActor;
 	IEnemyInterface*ThisActor;
-	
+
+	//按下、松开、长按
+	void AbilityInputTagPressed(FGameplayTag InputTag);
+	void AbilityInputTagReleased(FGameplayTag InputTag);
+	void AbilityInputTagHeld(FGameplayTag InputTag);
+
+	//带标签的IA资产列表
+	UPROPERTY(EditDefaultsOnly,Category="Input")
+	TObjectPtr<UAuraInputConfig> InputConfig;
 };
