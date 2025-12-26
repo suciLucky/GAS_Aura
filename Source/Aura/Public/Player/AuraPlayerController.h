@@ -4,6 +4,8 @@
 
 #include "EnhancedInputSubsystems.h"
 #include "CoreMinimal.h"
+#include "AbilitySystem/AuraAbilitySystemComponent.h"
+#include "Components/SplineComponent.h"
 #include "GameFramework/PlayerController.h"
 #include "Input/AuraInputConfig.h"
 #include "AuraPlayerController.generated.h"
@@ -43,7 +45,7 @@ private:
 	IEnemyInterface*LastActor;
 	IEnemyInterface*ThisActor;
 
-	//按下、松开、长按
+	//按下、松开、长按触发ASC对应的的函数
 	void AbilityInputTagPressed(FGameplayTag InputTag);
 	void AbilityInputTagReleased(FGameplayTag InputTag);
 	void AbilityInputTagHeld(FGameplayTag InputTag);
@@ -51,4 +53,33 @@ private:
 	//带标签的IA资产列表
 	UPROPERTY(EditDefaultsOnly,Category="Input")
 	TObjectPtr<UAuraInputConfig> InputConfig;
+
+	//复用的ASC
+	UPROPERTY()
+	TObjectPtr<UAuraAbilitySystemComponent> AuraAbilitySystemComponent;
+	//在Controller中获取一次ASC
+	UAuraAbilitySystemComponent*GetASC();
+
+	/**
+	* 点击移动方式所需变量
+	*/
+	//缓存的目的地点
+	FVector CachedDestination=FVector();
+	//持续跟随鼠标的时间
+	float FollowTime=0.f;
+	//短按鼠标的阈值
+	float ShortPressThreshold=0.5f;
+	//是否自动寻路
+	bool bAutoRunning=false;
+	//鼠标是否在索敌
+	bool bTargeting=false;
+	//到达目的地精确度误差
+	UPROPERTY(EditDefaultsOnly)
+	float AutoRunAcceptanceRadius=50.f;
+	//寻路的路径样条
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<USplineComponent> Spline;
+
+	//自动寻路函数
+	void AutoRun();
 };
