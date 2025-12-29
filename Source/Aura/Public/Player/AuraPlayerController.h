@@ -44,10 +44,14 @@ private:
 	//查询上一帧和当前帧鼠标下的Actor
 	IEnemyInterface*LastActor;
 	IEnemyInterface*ThisActor;
+	//获取鼠标下Actor 
+	FHitResult CursorHit;
 
-	//按下、松开、长按触发ASC对应的的函数
+	//按下触发ASC对应的的函数
 	void AbilityInputTagPressed(FGameplayTag InputTag);
+	//松开触发ASC对应的的函数
 	void AbilityInputTagReleased(FGameplayTag InputTag);
+	//长按触发ASC对应的的函数
 	void AbilityInputTagHeld(FGameplayTag InputTag);
 
 	//带标签的IA资产列表
@@ -60,9 +64,6 @@ private:
 	//在Controller中获取一次ASC
 	UAuraAbilitySystemComponent*GetASC();
 
-	/**
-	* 点击移动方式所需变量
-	*/
 	//缓存的目的地点
 	FVector CachedDestination=FVector();
 	//持续跟随鼠标的时间

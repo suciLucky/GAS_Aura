@@ -30,8 +30,8 @@ public:
 	void AbilityInputTagReleased(const FGameplayTag& InputTag);
 protected:
 
-	//GE生效时的回调函数，通过多播委托绑定
-
-	void EffectApplied( UAbilitySystemComponent*AbilitySystemComponent, const FGameplayEffectSpec&EffectSpec, FActiveGameplayEffectHandle ActiveEffectHandle)const;
+	//GE生效时的Client RPC回调函数，通过多播委托绑定
+	UFUNCTION(Client,Reliable)
+	void ClientEffectApplied( UAbilitySystemComponent*AbilitySystemComponent, const FGameplayEffectSpec&EffectSpec, FActiveGameplayEffectHandle ActiveEffectHandle)const;
 	
 };

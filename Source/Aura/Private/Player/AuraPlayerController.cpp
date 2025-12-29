@@ -47,40 +47,19 @@ void AAuraPlayerController::AutoRun()
 }
 void AAuraPlayerController::CursorTrace()
 {
-	//获取鼠标下Actor 
-	FHitResult CursorHit;
 	GetHitResultUnderCursor(ECC_Visibility,false,CursorHit);
 	if(!CursorHit.bBlockingHit) return;//没命中不执行
 
 	LastActor=ThisActor;//初始化俩帧Actor
 	ThisActor=Cast<IEnemyInterface>(CursorHit.GetActor()); //查询命中的Actor是否继承（实现）EnemyInterface
-	
-	/**讨论上一帧和当前帧ACtor情况
-	 *情况一：LastActor=ThisActor=NULL;--不进行操作
-	 *情况二：LastActor=NULL,ThisActor有效；--需要HighLight()ThisActor；
-	 *情况三：LastActor有效而ThisActor无效；--需要UnHighLight()LastActor；
-	 *情况四：两者都有效但是两者不是同一个，意味着鼠标从上一个有效Actor移向下一个有效Actor；--需要HighLight()ThisActor而UnHighLight()LastActor；
-	 *情况五：两者都有效且相等，说明鼠标悬停在某一有效Actor上；--前几种情况已经设置该Actor，所以不进行操作；
-	 * */
 
-	if(LastActor == nullptr)
+	//设置高亮
+	if(LastActor!=ThisActor)
 	{
-		if(ThisActor!=nullptr) ThisActor->HighlightActor();//情况二
-		else{}//情况一
+		if(LastActor)LastActor->UnHighlightActor();
+		if(ThisActor)ThisActor->HighlightActor();		
 	}
-	else //LastActor有效
-	{
-		if(ThisActor==nullptr) LastActor->UnHighlightActor();//情况三
-		else 
-		{
-			if(LastActor!=ThisActor)//情况四
-			{
-				ThisActor->HighlightActor();
-                LastActor->UnHighlightActor();
-			}
-			else{} //情况五			
-		}		
-	}	
+	
 }
 
 void AAuraPlayerController::AbilityInputTagPressed(FGameplayTag InputTag)
@@ -110,7 +89,7 @@ void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 	//寻路结束
 	else
 	{
-		APawn*ControlledPawn=GetPawn();
+		const APawn*ControlledPawn=GetPawn();
 		if(FollowTime<=ShortPressThreshold&&ControlledPawn)
 		{
 			if(UNavigationPath*NavPath=UNavigationSystemV1::FindPathToLocationSynchronously
@@ -119,8 +98,7 @@ void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 				Spline->ClearSplinePoints();
 				for(const auto&PointLocation:NavPath->PathPoints)
 				{
-					Spline->AddSplinePoint(PointLocation,ESplineCoordinateSpace::World);
-					DrawDebugSphere(GetWorld(),PointLocation,5.f,8.f,FColor::Green,false,5.f);
+					Spline->AddSplinePoint(PointLocation,ESplineCoordinateSpace::World);					
 				}
 				CachedDestination=NavPath->PathPoints.Last();
 				bAutoRunning=true;
@@ -129,7 +107,6 @@ void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 		FollowTime=0.f;
 		bTargeting=false;
 	}
-
 }
 
 void AAuraPlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
@@ -149,10 +126,9 @@ void AAuraPlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
 	else
 	{
 		FollowTime+=GetWorld()->GetDeltaSeconds();
-		FHitResult Hit;
-		if(GetHitResultUnderCursor(ECC_Visibility,false,Hit))
+		if(CursorHit.bBlockingHit)
 		{
-			CachedDestination=Hit.ImpactPoint;
+			CachedDestination=CursorHit.ImpactPoint;
 		}
 		if(APawn*ControlledPawn=GetPawn())
 		{
@@ -167,7 +143,8 @@ UAuraAbilitySystemComponent* AAuraPlayerController::GetASC()
 {
 	if(AuraAbilitySystemComponent==nullptr)
 	{		
-		AuraAbilitySystemComponent=Cast<UAuraAbilitySystemComponent>(UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetPawn()));
+		AuraAbilitySystemComponent=Cast<UAuraAbilitySystemComponent>(
+			UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetPawn()));
 	}
 	return AuraAbilitySystemComponent;
 }

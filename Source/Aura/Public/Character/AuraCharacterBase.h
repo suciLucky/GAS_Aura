@@ -28,9 +28,16 @@ protected:
 
 	virtual void BeginPlay() override;
 
-//创建武器
+    //创建武器
 	UPROPERTY(EditAnywhere,Category="Combat")
 	TObjectPtr<USkeletalMeshComponent> Weapon;
+
+	//武器插槽名
+	UPROPERTY(EditAnywhere,Category="Combat")
+	FName WeaponTipSocketName;
+
+	//返回插槽位置
+	virtual FVector GetCombatSocketLocation() override;
 	
 	//创建AbilitySystemComponent和AttributeSet（给Enemy使用，在Enemy中定义）
 	UPROPERTY()
