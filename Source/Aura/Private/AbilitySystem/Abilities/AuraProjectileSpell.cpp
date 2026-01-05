@@ -6,7 +6,6 @@
 #include "Actor/AuraProjectile.h"
 #include "Interaction/CombatInterface.h"
 #include "Player/AuraPlayerController.h"
-#include "Interaction/EnemyInterface.h"
 #include "Kismet/KismetMathLibrary.h"
 
 
@@ -29,7 +28,7 @@ void UAuraProjectileSpell::ActivateAbility(const FGameplayAbilitySpecHandle Hand
 	}
 	*/	
 }
-void UAuraProjectileSpell::SpawnProjectile()
+void UAuraProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLocation)
 {
 	//检查是否在服务器上调用
 	const bool IsServer = GetAvatarActorFromActorInfo()->HasAuthority();
@@ -42,15 +41,12 @@ void UAuraProjectileSpell::SpawnProjectile()
 		const FVector SocketLocation = CombatInterface->GetCombatSocketLocation();
 		FTransform SpawnTransform;
 		SpawnTransform.SetLocation(SocketLocation);
-		//TODO:Set Rotation
-		/**
-		 *Self solution
-		if(TargetActor)
-		{
-			const FRotator Rotation = UKismetMathLibrary::FindLookAtRotation(SocketLocation,TargetActor->GetActorLocation());
-			SpawnTransform.SetRotation(Rotation.Quaternion());
-		}
-		*/
+
+		//Set Rotation
+		FRotator Rotation = UKismetMathLibrary::FindLookAtRotation(SocketLocation,ProjectileTargetLocation);
+		Rotation.Pitch=0.f;
+		SpawnTransform.SetRotation(Rotation.Quaternion());
+
 		
 		AAuraProjectile*Projectile = GetWorld()->SpawnActorDeferred<AAuraProjectile>(ProjectileClass,SpawnTransform,
 			GetAvatarActorFromActorInfo(),Cast<APawn>(GetAvatarActorFromActorInfo()),

@@ -47,6 +47,7 @@ int32 AAuraCharacter::GetPlayerLevel()
 	return AuraPlayerState->GetPlayerLevel();
 }
 
+
 void AAuraCharacter::InitAbilityActorInfo()
 {
 	//初始化ASC的ActorInfo

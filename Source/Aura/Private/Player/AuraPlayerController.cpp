@@ -81,19 +81,16 @@ void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 		if(GetASC())GetASC()->AbilityInputTagReleased(InputTag);
 		return;
 	}
-	//是鼠标左键但是在索敌的响应
-	if(bTargeting)
-	{
-		if(GetASC())GetASC()->AbilityInputTagReleased(InputTag);
-	}
-	//寻路结束
-	else
+
+	if(GetASC())GetASC()->AbilityInputTagReleased(InputTag);
+	//不是鼠标左键也不是按住Shift的响应，寻路结束
+	if(!bTargeting&&!bShiftKeyDown)
 	{
 		const APawn*ControlledPawn=GetPawn();
 		if(FollowTime<=ShortPressThreshold&&ControlledPawn)
 		{
 			if(UNavigationPath*NavPath=UNavigationSystemV1::FindPathToLocationSynchronously
-				(this,ControlledPawn->GetActorLocation(),CachedDestination))
+			(this,ControlledPawn->GetActorLocation(),CachedDestination))
 			{
 				Spline->ClearSplinePoints();
 				for(const auto&PointLocation:NavPath->PathPoints)
@@ -117,8 +114,8 @@ void AAuraPlayerController::AbilityInputTagHeld(FGameplayTag InputTag)
 		if(GetASC())GetASC()->AbilityInputTagHeld(InputTag);
 		return;
 	}
-	//是鼠标左键但是在索敌的响应
-	if(bTargeting)
+	//是鼠标左键但是在索敌或者按着Shift键的响应
+	if(bTargeting||bShiftKeyDown)
 	{
 		if(GetASC())GetASC()->AbilityInputTagHeld(InputTag);
 	}
@@ -180,7 +177,8 @@ void AAuraPlayerController::SetupInputComponent()
 	Super::SetupInputComponent();
 	UAuraInputComponent*AuraInputComponent=CastChecked<UAuraInputComponent>(InputComponent);
 	AuraInputComponent->BindAction(MoveAction,ETriggerEvent::Triggered,this,&AAuraPlayerController::Move);
-
+	AuraInputComponent->BindAction(ShiftAction,ETriggerEvent::Started,this,&ThisClass::ShiftPressed);
+	AuraInputComponent->BindAction(ShiftAction,ETriggerEvent::Completed,this,&ThisClass::ShiftReleased);
 	AuraInputComponent->BindAbilityActions(InputConfig, this, &ThisClass::AbilityInputTagPressed,
 	                                       &ThisClass::AbilityInputTagReleased, &ThisClass::AbilityInputTagHeld);
 	

@@ -22,8 +22,7 @@ protected:
 	//要发射的发射物
 	UPROPERTY(EditAnywhere,BlueprintReadOnly)
 	TSubclassOf<AAuraProjectile> ProjectileClass;
-
-	//self :AActor*TargetActor=nullptr;
+	
 	UFUNCTION(BlueprintCallable,Category="Projectile")
-	void SpawnProjectile();
+	void SpawnProjectile(const FVector& ProjectileTargetLocation);
 };
