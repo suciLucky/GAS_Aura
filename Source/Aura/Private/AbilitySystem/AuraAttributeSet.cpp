@@ -54,7 +54,7 @@ void UAuraAttributeSet::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet, Armor, COND_None, REPNOTIFY_Always);
 	//将服务器上的ArmorPenetration（护甲穿透）属性自动同步给所有客户端。
 	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet, ArmorPenetration, COND_None, REPNOTIFY_Always);
-	//将服务器上的BlockChange（防御率）属性自动同步给所有客户端。
+	//将服务器上的BlockChance（防御率）属性自动同步给所有客户端。
 	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet, BlockChance, COND_None, REPNOTIFY_Always);
 	//将服务器上的CriticalHitChance（暴击率）属性自动同步给所有客户端。
 	DOREPLIFETIME_CONDITION_NOTIFY(UAuraAttributeSet, CriticalHitChance, COND_None, REPNOTIFY_Always);
@@ -128,6 +128,7 @@ void UAuraAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
 	if(Data.EvaluatedData.Attribute==GetHealthAttribute())
 	{
 		SetHealth(FMath::Clamp(GetHealth(), 0.f, GetMaxHealth()));
+		UE_LOG(LogTemp,Warning,TEXT("Change Health on %s,Health: %f"),*Props.TargetAvatarActor->GetName(),GetHealth());
 	}
 	if(Data.EvaluatedData.Attribute==GetManaAttribute())
 	{

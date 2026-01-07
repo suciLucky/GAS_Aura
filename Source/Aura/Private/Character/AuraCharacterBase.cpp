@@ -14,6 +14,7 @@ AAuraCharacterBase::AAuraCharacterBase()
 	GetMesh()->SetCollisionResponseToChannel(ECC_Camera,ECR_Ignore);
 	GetMesh()->SetCollisionResponseToChannel(ECC_PROJECTILE,ECR_Overlap);
 	GetMesh()->SetGenerateOverlapEvents(true);
+	GetCapsuleComponent()->SetGenerateOverlapEvents(false);
 	
 //设置武器插槽、碰撞
 	Weapon = CreateDefaultSubobject<USkeletalMeshComponent>("Weapon");

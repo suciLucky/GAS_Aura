@@ -25,4 +25,8 @@ protected:
 	
 	UFUNCTION(BlueprintCallable,Category="Projectile")
 	void SpawnProjectile(const FVector& ProjectileTargetLocation);
+
+	//蓝图中选择伤害效果类
+	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
+	TSubclassOf<UGameplayEffect> DamageEffectClass;
 };

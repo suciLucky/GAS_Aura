@@ -23,6 +23,7 @@ public:
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UProjectileMovementComponent>ProjectileMovementComponent;
 
+	//伤害GE的SpecHandle，在施法能力中设置
 	UPROPERTY(BlueprintReadWrite,meta=(ExposeOnSpawn = true))
 	FGameplayEffectSpecHandle DamageEffectSpecHandle;
 

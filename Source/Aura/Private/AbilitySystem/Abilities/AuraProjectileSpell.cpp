@@ -3,6 +3,7 @@
 
 #include "AbilitySystem/Abilities/AuraProjectileSpell.h"
 
+#include "AbilitySystemBlueprintLibrary.h"
 #include "Actor/AuraProjectile.h"
 #include "Interaction/CombatInterface.h"
 #include "Player/AuraPlayerController.h"
@@ -14,20 +15,8 @@ void UAuraProjectileSpell::ActivateAbility(const FGameplayAbilitySpecHandle Hand
                                            const FGameplayEventData* TriggerEventData)
 {
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
-	/**
-	 *Self solution
-	const FVector PlayerLocation = GetAvatarActorFromActorInfo()->GetActorLocation();
-	AAuraPlayerController*PlayerController = Cast<AAuraPlayerController>(GetAvatarActorFromActorInfo()->GetInstigatorController());
-	FHitResult CursorHit;
-	PlayerController->GetHitResultUnderCursor(ECC_Visibility,false,CursorHit);
-	if(Cast<IEnemyInterface>(CursorHit.GetActor()))
-	{
-		TargetActor=CursorHit.GetActor();
-		const FVector TargetLocation = CursorHit.GetActor()->GetActorLocation();
-		GetAvatarActorFromActorInfo()->SetActorRotation(UKismetMathLibrary::FindLookAtRotation(PlayerLocation,TargetLocation));
-	}
-	*/	
 }
+
 void UAuraProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLocation)
 {
 	//检查是否在服务器上调用
@@ -47,12 +36,17 @@ void UAuraProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLocati
 		Rotation.Pitch=0.f;
 		SpawnTransform.SetRotation(Rotation.Quaternion());
 
-		
+		//延迟生成
 		AAuraProjectile*Projectile = GetWorld()->SpawnActorDeferred<AAuraProjectile>(ProjectileClass,SpawnTransform,
 			GetAvatarActorFromActorInfo(),Cast<APawn>(GetAvatarActorFromActorInfo()),
 			ESpawnActorCollisionHandlingMethod::AlwaysSpawn);
 
-		//TODO:Give the projectile a GE spec for causing damage
+		//使用伤害GE创建SpecHandle并设置到Projectile Actor上
+		const UAbilitySystemComponent* SourceASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(GetAvatarActorFromActorInfo());
+		const FGameplayEffectSpecHandle SpecHandle = SourceASC->MakeOutgoingSpec(DamageEffectClass,GetAbilityLevel(),SourceASC->MakeEffectContext());
+		Projectile->DamageEffectSpecHandle = SpecHandle;
+
+		//结束生成
 		Projectile->FinishSpawning(SpawnTransform);
 	}	
 }

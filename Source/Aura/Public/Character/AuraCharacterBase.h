@@ -40,7 +40,7 @@ protected:
 	virtual FVector GetCombatSocketLocation() override;
 	
 	//创建AbilitySystemComponent和AttributeSet（给Enemy使用，在Enemy中定义）
-	UPROPERTY()
+	UPROPERTY(BlueprintReadOnly)
 	TObjectPtr<UAbilitySystemComponent>AbilitySystemComponent;
 
 	UPROPERTY()
@@ -62,7 +62,7 @@ protected:
 	TSubclassOf<UGameplayEffect> DefaultSecondaryAttributes;
 
 	//应用初始化属性GE的函数
-	void InitializeDefaultAttributes() const;
+	virtual void InitializeDefaultAttributes() const;
 
 	//应用GE到自身的函数
 	void ApplyEffectToSelf(const TSubclassOf<UGameplayEffect>& GameplayEffectClass,const float& Level) const;
