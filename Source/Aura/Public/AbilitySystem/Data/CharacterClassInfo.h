@@ -46,6 +46,9 @@ public:
 	UPROPERTY(EditDefaultsOnly,Category="Common Class Defaults")
 	TSubclassOf<UGameplayEffect> VitalAttributes;
 
+	UPROPERTY(EditDefaultsOnly,Category="Common Class Defaults")
+	TArray<TSubclassOf<UGameplayAbility>> CommonAbilities;
+
 	//通过角色种类在Map中搜寻数据
 	FCharacterClassDefaultInfo GetClassDefaultInfo(const ECharacterClass CharacterClass);
 	

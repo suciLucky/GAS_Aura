@@ -85,6 +85,11 @@ public:
 	FGameplayAttributeData Mana;
 	ATTRIBUTE_ACCESSORS(UAuraAttributeSet,Mana);
 
+	//Meta Attributes(对实际属性造成效果用到的中间属性，GE修改该属性)
+	UPROPERTY(BlueprintReadOnly,Category="Meta Attributes")
+	FGameplayAttributeData IncomingDamage;
+	ATTRIBUTE_ACCESSORS(UAuraAttributeSet,IncomingDamage);
+
 	//Primary Attributes
 	UPROPERTY(BlueprintReadOnly,ReplicatedUsing=OnRep_Strength,Category="Primary Attributes")
 	FGameplayAttributeData Strength;

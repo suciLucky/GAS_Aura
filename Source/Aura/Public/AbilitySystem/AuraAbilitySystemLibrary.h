@@ -27,5 +27,8 @@ public:
 	//使用角色种类和等级初始化角色信息
 	UFUNCTION(BlueprintCallable,Category="AuraAbilitySystemLibrary|CharacterClassDefaults")
 	static void InitializeDefaultAttributes(const UObject*WorldContextObject,const ECharacterClass CharacterClass,const float Level,UAbilitySystemComponent*ASC);
-	
+
+	//初始化敌人的技能
+	UFUNCTION(BlueprintCallable,Category="AuraAbilitySystemLibrary|CharacterClassDefaults")
+	static void GiveStartupAbilities(const UObject*WorldContextObject,UAbilitySystemComponent*ASC);
 };

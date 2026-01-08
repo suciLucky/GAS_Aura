@@ -24,6 +24,9 @@ public:
     virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	UAttributeSet*GetAttributeSet() const {return AttributeSet;}
 
+	//获取受击蒙太奇
+	virtual UAnimMontage* GetHitReactMontage_Implementation() override;
+
 protected:
 
 	virtual void BeginPlay() override;
@@ -74,4 +77,7 @@ private:
 	UPROPERTY(EditAnywhere,Category="Abilities")
 	TArray<TSubclassOf<UGameplayAbility>> StartupAbilities;
 
+	//受击蒙太奇
+	UPROPERTY(EditAnywhere,Category="Combat")
+	TObjectPtr<UAnimMontage> HitReactMontage;
 };

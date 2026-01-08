@@ -30,4 +30,8 @@ public:
 	//更新朝向目标位置
 	UFUNCTION(BlueprintImplementableEvent,BlueprintCallable)
 	void UpdateFacingTarget(const FVector& Target);
+
+	//获取受击蒙太奇
+	UFUNCTION(BlueprintNativeEvent,BlueprintCallable)
+	UAnimMontage* GetHitReactMontage();
 };

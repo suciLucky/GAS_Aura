@@ -3,9 +3,11 @@
 
 #include "Character/AuraEnemy.h"
 
+#include "AuraGameplayTags.h"
 #include "AbilitySystem/AuraAbilitySystemLibrary.h"
 #include "AbilitySystem/AuraAttributeSet.h"
 #include "Aura/Aura.h"
+#include "GameFramework/CharacterMovementComponent.h"
 
 AAuraEnemy::AAuraEnemy()
 {
@@ -29,7 +31,10 @@ void AAuraEnemy::BeginPlay()
 {
 	Super::BeginPlay();
 	InitAbilityActorInfo();
-
+	GetCharacterMovement()->MaxWalkSpeed = BaseWalkSpeed;
+	//初始化技能
+	UAuraAbilitySystemLibrary::GiveStartupAbilities(this,AbilitySystemComponent);
+	
 	//设置血条的Controller为敌人自身
 	if(UAuraUserWidget* AuraUserWidget = Cast<UAuraUserWidget>(EnemyHealthBar->GetUserWidgetObject()))
 		AuraUserWidget->SetWidgetController(this);
@@ -47,12 +52,18 @@ void AAuraEnemy::BeginPlay()
      			{
      				OnMaxHealthChanged.Broadcast(AuraAttributeSet->GetMaxHealth());
      			});
-             
+            //注册受击标签变化时的监听事件并绑定回调函数
+		    AbilitySystemComponent->RegisterGameplayTagEvent(FAuraGameplayTags::Get().Effects_HitReact,EGameplayTagEventType::NewOrRemoved).AddUObject(
+		    this,&AAuraEnemy::HitReactTagChanged);
      		//广播初始值
      		OnHealthChanged.Broadcast(AuraAttributeSet->GetHealth());
      		OnMaxHealthChanged.Broadcast(AuraAttributeSet->GetMaxHealth());
-     	}
-	
+     	}	
+}
+void AAuraEnemy::HitReactTagChanged(const FGameplayTag CallbackTag, int32 NewCount)
+{
+	bHitReacting = NewCount > 0.f;
+	GetCharacterMovement()->MaxWalkSpeed = bHitReacting ? 0.f : BaseWalkSpeed;
 }
 
 void AAuraEnemy::InitAbilityActorInfo()
