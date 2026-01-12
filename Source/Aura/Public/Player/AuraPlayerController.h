@@ -8,6 +8,7 @@
 #include "Components/SplineComponent.h"
 #include "GameFramework/PlayerController.h"
 #include "Input/AuraInputConfig.h"
+#include "UI/Widget/DamageTextComponent.h"
 #include "AuraPlayerController.generated.h"
 
 //声明
@@ -25,6 +26,11 @@ class AURA_API AAuraPlayerController : public APlayerController
 public:
 	AAuraPlayerController();//构造函数
 	virtual void PlayerTick(float DeltaTime) override;//Tick
+
+	//构建显示伤害数字UI
+	UFUNCTION(Client,Reliable)
+	void ShowDamageNumber(float DamageAmount,ACharacter* TargetCharacter);
+	
 protected:
 	virtual void BeginPlay() override;
 	//设置输入
@@ -89,4 +95,8 @@ private:
 
 	//自动寻路函数
 	void AutoRun();
+
+	//伤害数字Widget组件
+	UPROPERTY(EditDefaultsOnly)
+	TSubclassOf<UDamageTextComponent> DamageTextComponentClass;
 };

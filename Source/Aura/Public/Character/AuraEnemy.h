@@ -27,6 +27,7 @@ public:
 
 	/**Combat接口函数*/
 	virtual int32 GetPlayerLevel() override;
+	virtual void Die() override;
 	/** end Combat接口函数*/
 
 	//属性变化委托
@@ -45,6 +46,10 @@ public:
 	//基础行走速度
 	UPROPERTY(BlueprintReadOnly,Category="Combat")
 	float BaseWalkSpeed = 250.f;
+
+	//生命周期
+	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="Combat")
+	float LifeSpan = 5.f;
 protected:
 	virtual void BeginPlay() override;
 

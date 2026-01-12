@@ -27,6 +27,14 @@ public:
 	//获取受击蒙太奇
 	virtual UAnimMontage* GetHitReactMontage_Implementation() override;
 
+	//死亡(服务器上调用)
+	virtual void Die() override;
+
+	//RPC处理所有端的死亡
+	UFUNCTION(NetMulticast,Reliable)
+	virtual void MulticastHandleDeath();
+	
+
 protected:
 
 	virtual void BeginPlay() override;
@@ -71,6 +79,19 @@ protected:
 	void ApplyEffectToSelf(const TSubclassOf<UGameplayEffect>& GameplayEffectClass,const float& Level) const;
 
 	void AddCharacterAbilities();
+
+	//溶解材质
+	UPROPERTY(EditAnywhere,BlueprintReadOnly)
+	TObjectPtr<UMaterialInstance> DissolveMaterialInstance;
+	UPROPERTY(EditAnywhere,BlueprintReadOnly)
+	TObjectPtr<UMaterialInstance> WeaponDissolveMaterialInstance;
+	//溶解调用
+	void Dissolve();
+	//使用时间线在蓝图实施溶解
+	UFUNCTION(BlueprintImplementableEvent)
+	void StartDissolveTimeline(UMaterialInstanceDynamic* DynamicMaterialInstance);
+	UFUNCTION(BlueprintImplementableEvent)
+	void StartWeaponDissolveTimeline(UMaterialInstanceDynamic* DynamicMaterialInstance);
 private:
 
 	//初始Abilities列表

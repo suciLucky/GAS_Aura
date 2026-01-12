@@ -6,6 +6,7 @@
 #include "AuraGameplayTags.h"
 #include "NavigationSystem.h"
 #include "NavigationPath.h"
+#include "GameFramework/Character.h"
 #include "Input/AuraInputComponent.h"
 #include "Interaction/EnemyInterface.h"
 
@@ -28,6 +29,21 @@ void AAuraPlayerController::PlayerTick(float DeltaTime)
 	AutoRun();
 	
 }
+
+void AAuraPlayerController::ShowDamageNumber_Implementation(float DamageAmount,ACharacter* TargetCharacter)
+{
+	if(IsValid(TargetCharacter)&&DamageTextComponentClass)
+	{
+		UDamageTextComponent* TextComponent = NewObject<UDamageTextComponent>(TargetCharacter,DamageTextComponentClass);
+		TextComponent->RegisterComponent();
+		TextComponent->SetWidgetSpace(EWidgetSpace::Screen);
+		TextComponent->SetGenerateOverlapEvents(false);
+		TextComponent->AttachToComponent(TargetCharacter->GetRootComponent(),FAttachmentTransformRules::KeepRelativeTransform);
+		TextComponent->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
+		TextComponent->SetDamageText(DamageAmount);
+	}
+}
+
 void AAuraPlayerController::AutoRun()
 {
 	if(!bAutoRunning)return;
