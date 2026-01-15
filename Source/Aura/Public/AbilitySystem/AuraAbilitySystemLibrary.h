@@ -31,4 +31,8 @@ public:
 	//初始化敌人的技能
 	UFUNCTION(BlueprintCallable,Category="AuraAbilitySystemLibrary|CharacterClassDefaults")
 	static void GiveStartupAbilities(const UObject*WorldContextObject,UAbilitySystemComponent*ASC);
+
+	//获取角色信息
+	UFUNCTION(BlueprintCallable,Category="AuraAbilitySystemLibrary|CharacterClassDefaults")
+	static UCharacterClassInfo* GetCharacterClassInfo(const UObject*WorldContextObject);
 };

@@ -49,6 +49,10 @@ public:
 	UPROPERTY(EditDefaultsOnly,Category="Common Class Defaults")
 	TArray<TSubclassOf<UGameplayAbility>> CommonAbilities;
 
+	//计算伤害时用到的系数
+	UPROPERTY(EditDefaultsOnly,Category="Common Class Defaults|Damage")
+	TObjectPtr<UCurveTable> DamageCalculationCoefficients;
+
 	//通过角色种类在Map中搜寻数据
 	FCharacterClassDefaultInfo GetClassDefaultInfo(const ECharacterClass CharacterClass);
 	

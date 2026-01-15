@@ -44,32 +44,37 @@ UAttributeMenuWidgetController* UAuraAbilitySystemLibrary::GetaAttributeMenuWidg
 void UAuraAbilitySystemLibrary::InitializeDefaultAttributes(const UObject*WorldContextObject,const ECharacterClass CharacterClass,
 	const float Level,UAbilitySystemComponent*ASC)
 {
-	//获取到GameMode以获取初始化数据资产
-	const AAuraGameModeBase* AuraGameMode = Cast<AAuraGameModeBase>(UGameplayStatics::GetGameMode(WorldContextObject));
-	if(AuraGameMode==nullptr) return;
-
+	//获取角色数据
+	UCharacterClassInfo* CharacterClassInfo = GetCharacterClassInfo(WorldContextObject);
+	if(CharacterClassInfo==nullptr)return;
 	//设置GE的源对象
 	const AActor*AvatarActor = ASC->GetAvatarActor();
 	FGameplayEffectContextHandle ContextHandle= ASC->MakeEffectContext();
 	ContextHandle.AddSourceObject(AvatarActor);
-	
+
 	//在资产中通过条件查找初始化数据
-	const FCharacterClassDefaultInfo ClassDefaultInfo = AuraGameMode->CharacterClassInfo->GetClassDefaultInfo(CharacterClass);
+	const FCharacterClassDefaultInfo ClassDefaultInfo = CharacterClassInfo->GetClassDefaultInfo(CharacterClass);
 	//给特定角色通过其ASC应用初始化数据里的初始化GE
 	ASC->ApplyGameplayEffectSpecToSelf(*ASC->MakeOutgoingSpec(ClassDefaultInfo.PrimaryAttributes,Level,ContextHandle).Data.Get());
 	//给角色应用数据资产里的通用初始化GE
-	ASC->ApplyGameplayEffectSpecToSelf(*ASC->MakeOutgoingSpec(AuraGameMode->CharacterClassInfo->SecondaryAttributes,Level,ContextHandle).Data.Get());
-	ASC->ApplyGameplayEffectSpecToSelf(*ASC->MakeOutgoingSpec(AuraGameMode->CharacterClassInfo->VitalAttributes,Level,ContextHandle).Data.Get());
+	ASC->ApplyGameplayEffectSpecToSelf(*ASC->MakeOutgoingSpec(CharacterClassInfo->SecondaryAttributes,Level,ContextHandle).Data.Get());
+	ASC->ApplyGameplayEffectSpecToSelf(*ASC->MakeOutgoingSpec(CharacterClassInfo->VitalAttributes,Level,ContextHandle).Data.Get());
 }
 
 void UAuraAbilitySystemLibrary::GiveStartupAbilities(const UObject* WorldContextObject, UAbilitySystemComponent* ASC)
 {
-	const AAuraGameModeBase* AuraGameMode = Cast<AAuraGameModeBase>(UGameplayStatics::GetGameMode(WorldContextObject));
-	if(AuraGameMode==nullptr) return;
-
+	const UCharacterClassInfo* CharacterClassInfo = GetCharacterClassInfo(WorldContextObject);
+	if(CharacterClassInfo==nullptr)return;
 	//赋予技能
-	for(const auto Ability : AuraGameMode->CharacterClassInfo->CommonAbilities)
+	for(const auto Ability : CharacterClassInfo->CommonAbilities)
 	{
 		ASC->GiveAbility(FGameplayAbilitySpec(Ability));
 	}
+}
+
+UCharacterClassInfo* UAuraAbilitySystemLibrary::GetCharacterClassInfo(const UObject* WorldContextObject)
+{
+	const AAuraGameModeBase* AuraGameMode = Cast<AAuraGameModeBase>(UGameplayStatics::GetGameMode(WorldContextObject));
+	if(AuraGameMode==nullptr) return nullptr;
+	return AuraGameMode->CharacterClassInfo;
 }
