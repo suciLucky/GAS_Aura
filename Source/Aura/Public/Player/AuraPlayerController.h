@@ -29,7 +29,7 @@ public:
 
 	//构建显示伤害数字UI
 	UFUNCTION(Client,Reliable)
-	void ShowDamageNumber(float DamageAmount,ACharacter* TargetCharacter);
+	void ShowDamageNumber(float DamageAmount,ACharacter* TargetCharacter,const bool IsBlockedHit,const bool IsCriticalHit);
 	
 protected:
 	virtual void BeginPlay() override;

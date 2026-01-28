@@ -49,7 +49,10 @@ protected:
 	void GameplayEffectEndOverlap(AActor*TargetActor);
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Apllied Effects")
-	bool bDestroyOnEffectRemoval=false;
+	bool bDestroyOnEffectApplication=false;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Apllied Effects")
+	bool bApplyEffectsToEnemies=false;
 	
 	//需要应用的效果
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Apllied Effects")

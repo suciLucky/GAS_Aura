@@ -25,4 +25,11 @@ public:
 	//纯虚函数，显示/取消敌人高光
 	virtual void HighlightActor()=0;
 	virtual void UnHighlightActor()=0;
+
+	//设置和获取攻击目标
+	UFUNCTION(BlueprintCallable,BlueprintNativeEvent)
+	void SetCombatTarget(AActor* InCombatTarget);
+
+	UFUNCTION(BlueprintCallable,BlueprintNativeEvent)
+	AActor* GetCombatTarget() const;
 };

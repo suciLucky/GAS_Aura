@@ -24,11 +24,13 @@ public:
     virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 	UAttributeSet*GetAttributeSet() const {return AttributeSet;}
 
-	//获取受击蒙太奇
+	/** Combat Interface */
+	virtual FVector GetCombatSocketLocation_Implementation() override;
 	virtual UAnimMontage* GetHitReactMontage_Implementation() override;
-
-	//死亡(服务器上调用)
+	virtual bool IsDead_Implementation() const override;
+	virtual AActor* GetAvatar_Implementation() override;
 	virtual void Die() override;
+	/** end Combat Interface */
 
 	//RPC处理所有端的死亡
 	UFUNCTION(NetMulticast,Reliable)
@@ -47,8 +49,8 @@ protected:
 	UPROPERTY(EditAnywhere,Category="Combat")
 	FName WeaponTipSocketName;
 
-	//返回插槽位置
-	virtual FVector GetCombatSocketLocation() override;
+	//是否死亡
+	bool bDead = false;
 	
 	//创建AbilitySystemComponent和AttributeSet（给Enemy使用，在Enemy中定义）
 	UPROPERTY(BlueprintReadOnly)

@@ -18,6 +18,7 @@ public:
 
 	virtual void PossessedBy(AController* NewController) override;
 	virtual void OnRep_PlayerState() override;
+	virtual void OnRep_Controller() override;
 
 	/**Combat接口函数*/
 	virtual int32 GetPlayerLevel() override;

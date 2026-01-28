@@ -30,9 +30,9 @@ void AAuraPlayerController::PlayerTick(float DeltaTime)
 	
 }
 
-void AAuraPlayerController::ShowDamageNumber_Implementation(float DamageAmount,ACharacter* TargetCharacter)
+void AAuraPlayerController::ShowDamageNumber_Implementation(float DamageAmount,ACharacter* TargetCharacter,const bool IsBlockedHit,const bool IsCriticalHit)
 {
-	if(IsValid(TargetCharacter)&&DamageTextComponentClass)
+	if(IsValid(TargetCharacter)&&DamageTextComponentClass&&IsLocalController())
 	{
 		UDamageTextComponent* TextComponent = NewObject<UDamageTextComponent>(TargetCharacter,DamageTextComponentClass);
 		TextComponent->RegisterComponent();
@@ -40,7 +40,7 @@ void AAuraPlayerController::ShowDamageNumber_Implementation(float DamageAmount,A
 		TextComponent->SetGenerateOverlapEvents(false);
 		TextComponent->AttachToComponent(TargetCharacter->GetRootComponent(),FAttachmentTransformRules::KeepRelativeTransform);
 		TextComponent->DetachFromComponent(FDetachmentTransformRules::KeepWorldTransform);
-		TextComponent->SetDamageText(DamageAmount);
+		TextComponent->SetDamageText(DamageAmount,IsBlockedHit,IsCriticalHit);
 	}
 }
 
@@ -113,8 +113,12 @@ void AAuraPlayerController::AbilityInputTagReleased(FGameplayTag InputTag)
 				{
 					Spline->AddSplinePoint(PointLocation,ESplineCoordinateSpace::World);					
 				}
-				CachedDestination=NavPath->PathPoints.Last();
-				bAutoRunning=true;
+				if(NavPath->PathPoints.Num()>0)
+				{
+					CachedDestination=NavPath->PathPoints.Last();
+					bAutoRunning=true;
+				}
+				
 			}
 		}
 		FollowTime=0.f;

@@ -4,12 +4,14 @@
 
 #include "CoreMinimal.h"
 #include "AbilitySystem/Data/CharacterClassInfo.h"
+#include "AI/AuraAIController.h"
 #include "Character/AuraCharacterBase.h"
 #include "Components/WidgetComponent.h"
 #include "Interaction/EnemyInterface.h"
 #include "UI/WidgetController/OverlayWidgetController.h"
 #include "AuraEnemy.generated.h"
 
+class UBehaviorTree;
 /**
  * 
  */
@@ -20,6 +22,7 @@ class AURA_API AAuraEnemy : public AAuraCharacterBase,public IEnemyInterface//�
 public:
 	AAuraEnemy();
 
+	virtual void PossessedBy(AController* NewController) override;
 	/**Enemy接口函数*/
 	virtual void HighlightActor() override;
 	virtual void UnHighlightActor() override;
@@ -28,6 +31,8 @@ public:
 	/**Combat接口函数*/
 	virtual int32 GetPlayerLevel() override;
 	virtual void Die() override;
+	virtual void SetCombatTarget_Implementation(AActor* InCombatTarget) override;
+	virtual AActor* GetCombatTarget_Implementation() const override;
 	/** end Combat接口函数*/
 
 	//属性变化委托
@@ -50,6 +55,10 @@ public:
 	//生命周期
 	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="Combat")
 	float LifeSpan = 5.f;
+
+	//攻击目标
+	UPROPERTY(BlueprintReadWrite,Category="Combat")
+	TObjectPtr<AActor> CombatTarget;
 protected:
 	virtual void BeginPlay() override;
 
@@ -69,7 +78,11 @@ protected:
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
 	TObjectPtr<UWidgetComponent> EnemyHealthBar;
 
-	
-
+	//行为树
+	UPROPERTY(EditAnywhere,Category="AI")
+	TObjectPtr<UBehaviorTree> BehaviorTree;
+	//AIController
+	UPROPERTY()
+	TObjectPtr<AAuraAIController> AuraAIController;
 	
 };

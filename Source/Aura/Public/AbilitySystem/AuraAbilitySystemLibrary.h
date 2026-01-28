@@ -30,9 +30,28 @@ public:
 
 	//初始化敌人的技能
 	UFUNCTION(BlueprintCallable,Category="AuraAbilitySystemLibrary|CharacterClassDefaults")
-	static void GiveStartupAbilities(const UObject*WorldContextObject,UAbilitySystemComponent*ASC);
+	static void GiveStartupAbilities(const UObject*WorldContextObject,UAbilitySystemComponent*ASC,ECharacterClass CharacterClass);
 
 	//获取角色信息
 	UFUNCTION(BlueprintCallable,Category="AuraAbilitySystemLibrary|CharacterClassDefaults")
 	static UCharacterClassInfo* GetCharacterClassInfo(const UObject*WorldContextObject);
+
+	//获取攻击是否被阻挡
+	UFUNCTION(BlueprintPure,Category="AuraAbilitySystemLibrary|GameplayEffects")
+	static bool IsBlockedHit(const FGameplayEffectContextHandle& EffectContextHandle);
+	//获取攻击是否暴击
+	UFUNCTION(BlueprintPure,Category="AuraAbilitySystemLibrary|GameplayEffects")
+	static bool IsCriticalHit(const FGameplayEffectContextHandle& EffectContextHandle);
+
+	//设置攻击是否被阻挡
+	UFUNCTION(BlueprintCallable,Category="AuraAbilitySystemLibrary|GameplayEffects")
+	static void SetIsBlockedHit(UPARAM(ref)FGameplayEffectContextHandle& EffectContextHandle,const bool bInIsBlockedHit);
+	//设置攻击是否暴击
+	UFUNCTION(BlueprintCallable,Category="AuraAbilitySystemLibrary|GameplayEffects")
+	static void SetIsCriticalHit(UPARAM(ref)FGameplayEffectContextHandle& EffectContextHandle,const bool bInIsCriticalHit);
+
+	//查找半径内的存活玩家
+	UFUNCTION(BlueprintCallable,Category="AuraAbilitySystemLibrary|GameplayMechanic")
+	static void GetLivePlayersInRadius(const UObject*WorldContextObject,TArray<AActor*>& OutOverlappingActors,const TArray<AActor*>& ActorToIgnore,float Radius,const FVector& SphereOrigin);
+
 };
