@@ -49,7 +49,7 @@ public:
 	bool bHitReacting = false;
 
 	//基础行走速度
-	UPROPERTY(BlueprintReadOnly,Category="Combat")
+	UPROPERTY(EditAnywhere,Category="Combat")
 	float BaseWalkSpeed = 250.f;
 
 	//生命周期

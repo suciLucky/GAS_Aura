@@ -25,16 +25,20 @@ public:
 	UAttributeSet*GetAttributeSet() const {return AttributeSet;}
 
 	/** Combat Interface */
-	virtual FVector GetCombatSocketLocation_Implementation() override;
+	virtual FVector GetCombatSocketLocation_Implementation(const FGameplayTag& MontageTag) override;
 	virtual UAnimMontage* GetHitReactMontage_Implementation() override;
 	virtual bool IsDead_Implementation() const override;
 	virtual AActor* GetAvatar_Implementation() override;
 	virtual void Die() override;
+	virtual TArray<FTaggedMontage> GetAttackTaggedMontages_Implementation() override;
 	/** end Combat Interface */
 
 	//RPC处理所有端的死亡
 	UFUNCTION(NetMulticast,Reliable)
 	virtual void MulticastHandleDeath();
+
+	UPROPERTY(EditAnywhere,Category="Combat")
+	TArray<FTaggedMontage> AttackTaggedMontages;
 	
 
 protected:
@@ -42,12 +46,18 @@ protected:
 	virtual void BeginPlay() override;
 
     //创建武器
-	UPROPERTY(EditAnywhere,Category="Combat")
+	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="Combat")
 	TObjectPtr<USkeletalMeshComponent> Weapon;
 
 	//武器插槽名
 	UPROPERTY(EditAnywhere,Category="Combat")
 	FName WeaponTipSocketName;
+	//左手插槽名
+	UPROPERTY(EditAnywhere,Category="Combat")
+	FName LeftHandTipSocketName;
+	//右手插槽名
+	UPROPERTY(EditAnywhere,Category="Combat")
+	FName RightHandTipSocketName;
 
 	//是否死亡
 	bool bDead = false;

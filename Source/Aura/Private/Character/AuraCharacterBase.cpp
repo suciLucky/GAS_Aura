@@ -2,6 +2,8 @@
 
 
 #include "Character/AuraCharacterBase.h"
+
+#include "AuraGameplayTags.h"
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
 #include "Aura/Aura.h"
 #include "Components/CapsuleComponent.h"
@@ -51,6 +53,11 @@ void AAuraCharacterBase::Die()
 	MulticastHandleDeath();
 }
 
+TArray<FTaggedMontage> AAuraCharacterBase::GetAttackTaggedMontages_Implementation()
+{
+	return AttackTaggedMontages;
+}
+
 void AAuraCharacterBase::MulticastHandleDeath_Implementation()
 {
 	//模拟物理
@@ -76,10 +83,16 @@ void AAuraCharacterBase::BeginPlay()
 	
 }
 
-FVector AAuraCharacterBase::GetCombatSocketLocation_Implementation()
+FVector AAuraCharacterBase::GetCombatSocketLocation_Implementation(const FGameplayTag& MontageTag)
 {
-	check(Weapon);
-	return Weapon->GetSocketLocation(WeaponTipSocketName);
+	const FAuraGameplayTags& GameplayTags = FAuraGameplayTags::Get();
+	if(MontageTag.MatchesTagExact(GameplayTags.Montage_Attack_Weapon)&&IsValid(Weapon))		
+	    return Weapon->GetSocketLocation(WeaponTipSocketName);
+	if(MontageTag.MatchesTagExact(GameplayTags.Montage_Attack_LeftHand))		
+		return GetMesh()->GetSocketLocation(LeftHandTipSocketName);
+	if(MontageTag.MatchesTagExact(GameplayTags.Montage_Attack_RightHand))		
+		return GetMesh()->GetSocketLocation(RightHandTipSocketName);
+	return FVector();
 }
 
 void AAuraCharacterBase::InitAbilityActorInfo()
