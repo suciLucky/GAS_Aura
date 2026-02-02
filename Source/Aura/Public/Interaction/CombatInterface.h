@@ -4,10 +4,11 @@
 
 #include "CoreMinimal.h"
 #include "GameplayTagContainer.h"
+#include "NiagaraSystem.h"
 #include "UObject/Interface.h"
 #include "CombatInterface.generated.h"
 
-//将Tag与蒙太奇对应，便于检索
+//将Tag与多个信息对应，便于检索
 USTRUCT(BlueprintType)
 struct FTaggedMontage
 {
@@ -18,6 +19,12 @@ struct FTaggedMontage
 
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
 	FGameplayTag MontageTag;
+
+	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
+	FGameplayTag SocketTag;
+	
+	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly)
+	USoundBase* ImpactSound = nullptr;
 	
 };
 
@@ -42,7 +49,7 @@ public:
 
 	//获取插槽位置
 	UFUNCTION(BlueprintNativeEvent,BlueprintCallable)
-	FVector GetCombatSocketLocation(const FGameplayTag& MontageTag);
+	FVector GetCombatSocketLocation(const FGameplayTag& SocketTag);
 	//更新朝向目标位置
 	UFUNCTION(BlueprintImplementableEvent,BlueprintCallable)
 	void UpdateFacingTarget(const FVector& Target);
@@ -64,4 +71,12 @@ public:
 	//获取带Tag的蒙太奇数组
 	UFUNCTION(BlueprintNativeEvent,BlueprintCallable)
 	TArray<FTaggedMontage> GetAttackTaggedMontages();
+
+	//获取受击血液特效
+	UFUNCTION(BlueprintNativeEvent,BlueprintCallable)
+	UNiagaraSystem* GetBloodEffect();
+
+	//通过MontageTag获取结构
+	UFUNCTION(BlueprintNativeEvent,BlueprintCallable)
+	FTaggedMontage GetTaggedMontageByTag(const FGameplayTag& MontageTag);
 };

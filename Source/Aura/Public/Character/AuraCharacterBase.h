@@ -9,93 +9,93 @@
 #include "Interaction/CombatInterface.h"
 #include "AuraCharacterBase.generated.h"
 
+class UNiagaraSystem;
 class UAbilitySystemComponent;
 class UAttributeSet;
 
 UCLASS(Abstract)
-class AURA_API AAuraCharacterBase : public ACharacter,public IAbilitySystemInterface,public ICombatInterface//接口
+class AURA_API AAuraCharacterBase : public ACharacter, public IAbilitySystemInterface, public ICombatInterface //接口
 {
 	GENERATED_BODY()
 
 public:
-
 	AAuraCharacterBase();
 	//重写接口里的获取技能组件函数，声明获取AttributeSet函数
-    virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
-	UAttributeSet*GetAttributeSet() const {return AttributeSet;}
+	virtual UAbilitySystemComponent* GetAbilitySystemComponent() const override;
+	UAttributeSet* GetAttributeSet() const { return AttributeSet; }
 
 	/** Combat Interface */
-	virtual FVector GetCombatSocketLocation_Implementation(const FGameplayTag& MontageTag) override;
+	virtual FVector GetCombatSocketLocation_Implementation(const FGameplayTag& SocketTag) override;
 	virtual UAnimMontage* GetHitReactMontage_Implementation() override;
 	virtual bool IsDead_Implementation() const override;
 	virtual AActor* GetAvatar_Implementation() override;
 	virtual void Die() override;
 	virtual TArray<FTaggedMontage> GetAttackTaggedMontages_Implementation() override;
+	virtual UNiagaraSystem* GetBloodEffect_Implementation() override;
+	virtual FTaggedMontage GetTaggedMontageByTag_Implementation(const FGameplayTag& MontageTag) override;
 	/** end Combat Interface */
 
 	//RPC处理所有端的死亡
-	UFUNCTION(NetMulticast,Reliable)
+	UFUNCTION(NetMulticast, Reliable)
 	virtual void MulticastHandleDeath();
 
-	UPROPERTY(EditAnywhere,Category="Combat")
+	UPROPERTY(EditAnywhere, Category="Combat")
 	TArray<FTaggedMontage> AttackTaggedMontages;
-	
 
 protected:
-
 	virtual void BeginPlay() override;
 
-    //创建武器
-	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="Combat")
+	//创建武器
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Combat")
 	TObjectPtr<USkeletalMeshComponent> Weapon;
 
 	//武器插槽名
-	UPROPERTY(EditAnywhere,Category="Combat")
+	UPROPERTY(EditAnywhere, Category="Combat")
 	FName WeaponTipSocketName;
 	//左手插槽名
-	UPROPERTY(EditAnywhere,Category="Combat")
+	UPROPERTY(EditAnywhere, Category="Combat")
 	FName LeftHandTipSocketName;
 	//右手插槽名
-	UPROPERTY(EditAnywhere,Category="Combat")
+	UPROPERTY(EditAnywhere, Category="Combat")
 	FName RightHandTipSocketName;
 
 	//是否死亡
 	bool bDead = false;
-	
+
 	//创建AbilitySystemComponent和AttributeSet（给Enemy使用，在Enemy中定义）
 	UPROPERTY(BlueprintReadOnly)
-	TObjectPtr<UAbilitySystemComponent>AbilitySystemComponent;
+	TObjectPtr<UAbilitySystemComponent> AbilitySystemComponent;
 
 	UPROPERTY()
-	TObjectPtr<UAttributeSet>AttributeSet;
+	TObjectPtr<UAttributeSet> AttributeSet;
 
-	virtual void InitAbilityActorInfo();//初始化info
+	virtual void InitAbilityActorInfo(); //初始化info
 
 	//用于初始化Vital属性值的GE
-	UPROPERTY(BlueprintReadOnly,EditAnywhere,Category="Attributes")
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="Attributes")
 	TSubclassOf<UGameplayEffect> DefaultVitalAttributes;
 
-	
+
 	//用于初始化Primary属性值的GE
-	UPROPERTY(BlueprintReadOnly,EditAnywhere,Category="Attributes")
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="Attributes")
 	TSubclassOf<UGameplayEffect> DefaultPrimaryAttributes;
 
 	//用于初始化Secondary属性值的GE
-	UPROPERTY(BlueprintReadOnly,EditAnywhere,Category="Attributes")
+	UPROPERTY(BlueprintReadOnly, EditAnywhere, Category="Attributes")
 	TSubclassOf<UGameplayEffect> DefaultSecondaryAttributes;
 
 	//应用初始化属性GE的函数
 	virtual void InitializeDefaultAttributes() const;
 
 	//应用GE到自身的函数
-	void ApplyEffectToSelf(const TSubclassOf<UGameplayEffect>& GameplayEffectClass,const float& Level) const;
+	void ApplyEffectToSelf(const TSubclassOf<UGameplayEffect>& GameplayEffectClass, const float& Level) const;
 
 	void AddCharacterAbilities();
 
 	//溶解材质
-	UPROPERTY(EditAnywhere,BlueprintReadOnly)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TObjectPtr<UMaterialInstance> DissolveMaterialInstance;
-	UPROPERTY(EditAnywhere,BlueprintReadOnly)
+	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	TObjectPtr<UMaterialInstance> WeaponDissolveMaterialInstance;
 	//溶解调用
 	void Dissolve();
@@ -104,13 +104,21 @@ protected:
 	void StartDissolveTimeline(UMaterialInstanceDynamic* DynamicMaterialInstance);
 	UFUNCTION(BlueprintImplementableEvent)
 	void StartWeaponDissolveTimeline(UMaterialInstanceDynamic* DynamicMaterialInstance);
-private:
 
+	//受击血液特效
+	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="Combat")
+	UNiagaraSystem* BloodEffect;
+
+	//死亡音效
+	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="Combat")
+	USoundBase* DeathSound;
+
+private:
 	//初始Abilities列表
-	UPROPERTY(EditAnywhere,Category="Abilities")
+	UPROPERTY(EditAnywhere, Category="Abilities")
 	TArray<TSubclassOf<UGameplayAbility>> StartupAbilities;
 
 	//受击蒙太奇
-	UPROPERTY(EditAnywhere,Category="Combat")
+	UPROPERTY(EditAnywhere, Category="Combat")
 	TObjectPtr<UAnimMontage> HitReactMontage;
 };

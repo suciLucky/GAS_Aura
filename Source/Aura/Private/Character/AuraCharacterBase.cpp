@@ -7,6 +7,7 @@
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
 #include "Aura/Aura.h"
 #include "Components/CapsuleComponent.h"
+#include "Kismet/GameplayStatics.h"
 
 AAuraCharacterBase::AAuraCharacterBase()
 {
@@ -47,19 +48,36 @@ AActor* AAuraCharacterBase::GetAvatar_Implementation()
 	return this;
 }
 
+TArray<FTaggedMontage> AAuraCharacterBase::GetAttackTaggedMontages_Implementation()
+{
+	return AttackTaggedMontages;
+}
+
+UNiagaraSystem* AAuraCharacterBase::GetBloodEffect_Implementation()
+{
+	return BloodEffect;
+}
+
+FTaggedMontage AAuraCharacterBase::GetTaggedMontageByTag_Implementation(const FGameplayTag& MontageTag)
+{
+	for(auto TaggedMontage:AttackTaggedMontages)
+	{
+		if(TaggedMontage.MontageTag == MontageTag)
+			return TaggedMontage;
+	}
+	return FTaggedMontage();
+}
+
 void AAuraCharacterBase::Die()
 {
 	Weapon->DetachFromComponent(FDetachmentTransformRules(EDetachmentRule::KeepWorld,true));
 	MulticastHandleDeath();
 }
 
-TArray<FTaggedMontage> AAuraCharacterBase::GetAttackTaggedMontages_Implementation()
-{
-	return AttackTaggedMontages;
-}
-
 void AAuraCharacterBase::MulticastHandleDeath_Implementation()
 {
+	//播放死亡音效
+	UGameplayStatics::PlaySoundAtLocation(this,DeathSound,GetActorLocation(),GetActorRotation());
 	//模拟物理
 	Weapon->SetSimulatePhysics(true);
 	Weapon->SetEnableGravity(true);
@@ -83,14 +101,14 @@ void AAuraCharacterBase::BeginPlay()
 	
 }
 
-FVector AAuraCharacterBase::GetCombatSocketLocation_Implementation(const FGameplayTag& MontageTag)
+FVector AAuraCharacterBase::GetCombatSocketLocation_Implementation(const FGameplayTag& SocketTag)
 {
 	const FAuraGameplayTags& GameplayTags = FAuraGameplayTags::Get();
-	if(MontageTag.MatchesTagExact(GameplayTags.Montage_Attack_Weapon)&&IsValid(Weapon))		
+	if(SocketTag.MatchesTagExact(GameplayTags.CombatSocket_Weapon)&&IsValid(Weapon))		
 	    return Weapon->GetSocketLocation(WeaponTipSocketName);
-	if(MontageTag.MatchesTagExact(GameplayTags.Montage_Attack_LeftHand))		
+	if(SocketTag.MatchesTagExact(GameplayTags.CombatSocket_LeftHand))		
 		return GetMesh()->GetSocketLocation(LeftHandTipSocketName);
-	if(MontageTag.MatchesTagExact(GameplayTags.Montage_Attack_RightHand))		
+	if(SocketTag.MatchesTagExact(GameplayTags.CombatSocket_RightHand))		
 		return GetMesh()->GetSocketLocation(RightHandTipSocketName);
 	return FVector();
 }

@@ -17,9 +17,9 @@ public:
 	void SetIsBlockedHit(const bool InIsBlockedHit){bIsBlockedHit = InIsBlockedHit;}
 	
 	/** Returns the actual struct used for serialization, subclasses must override this! */
-	virtual UScriptStruct* GetScriptStruct() const 
+	virtual UScriptStruct* GetScriptStruct() const override
 	{
-		return FGameplayEffectContext::StaticStruct();
+		return FAuraGameplayEffectContext::StaticStruct();
 	}
 
 	/** Creates a copy of this context, used to duplicate for later modifications */
