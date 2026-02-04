@@ -54,10 +54,13 @@ protected:
 	FName WeaponTipSocketName;
 	//左手插槽名
 	UPROPERTY(EditAnywhere, Category="Combat")
-	FName LeftHandTipSocketName;
+	FName LeftHandSocketName;
 	//右手插槽名
 	UPROPERTY(EditAnywhere, Category="Combat")
-	FName RightHandTipSocketName;
+	FName RightHandSocketName;
+	//尾巴插槽名
+	UPROPERTY(EditAnywhere, Category="Combat")
+	FName TailSocketName;
 
 	//是否死亡
 	bool bDead = false;
