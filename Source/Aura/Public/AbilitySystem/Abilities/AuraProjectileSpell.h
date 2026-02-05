@@ -24,6 +24,6 @@ protected:
 	TSubclassOf<AAuraProjectile> ProjectileClass;
 	
 	UFUNCTION(BlueprintCallable,Category="Projectile")
-	void SpawnProjectile(const FVector& ProjectileTargetLocation,const FVector& SocketLocation);
+	void SpawnProjectile(const FVector& ProjectileTargetLocation,const FVector& SocketLocation,bool bOverridePitch = false,float PitchOverride = 0.f);
 
 };

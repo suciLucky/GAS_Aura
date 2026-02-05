@@ -37,4 +37,7 @@ class AURA_API UAuraSummonAbility : public UAuraGameplayAbility
 	//生成分布角
 	UPROPERTY(EditDefaultsOnly,Category="Summoning")
 	float SpawnSpread = 90.f;
+
+	UFUNCTION(BlueprintPure,Category="Summoning")
+	TSubclassOf<APawn> GetRandomMinionClass();
 };

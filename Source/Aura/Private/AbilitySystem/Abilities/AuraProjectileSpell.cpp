@@ -17,7 +17,7 @@ void UAuraProjectileSpell::ActivateAbility(const FGameplayAbilitySpecHandle Hand
 	Super::ActivateAbility(Handle, ActorInfo, ActivationInfo, TriggerEventData);
 }
 
-void UAuraProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLocation,const FVector& SocketLocation)
+void UAuraProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLocation,const FVector& SocketLocation,bool bOverridePitch ,float PitchOverride)
 {
 	//检查是否在服务器上调用,在服务器上生成
 	const bool IsServer = GetAvatarActorFromActorInfo()->HasAuthority();
@@ -27,8 +27,12 @@ void UAuraProjectileSpell::SpawnProjectile(const FVector& ProjectileTargetLocati
 	SpawnTransform.SetLocation(SocketLocation);
 
 	//Set Rotation
-	const FRotator Rotation = UKismetMathLibrary::FindLookAtRotation(SocketLocation,ProjectileTargetLocation);
-	SpawnTransform.SetRotation(Rotation.Quaternion());
+	FRotator Rotation = UKismetMathLibrary::FindLookAtRotation(SocketLocation,ProjectileTargetLocation);
+	if(bOverridePitch)
+	{
+		Rotation.Pitch = PitchOverride;
+	}
+	SpawnTransform.SetRotation(Rotation.Quaternion());	
 
 	//延迟生成
 	AAuraProjectile*Projectile = GetWorld()->SpawnActorDeferred<AAuraProjectile>(ProjectileClass,SpawnTransform,

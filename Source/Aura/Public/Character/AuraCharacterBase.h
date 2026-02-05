@@ -33,6 +33,8 @@ public:
 	virtual TArray<FTaggedMontage> GetAttackTaggedMontages_Implementation() override;
 	virtual UNiagaraSystem* GetBloodEffect_Implementation() override;
 	virtual FTaggedMontage GetTaggedMontageByTag_Implementation(const FGameplayTag& MontageTag) override;
+	int32 GetMinionCount_Implementation() override;
+	void IncrementMinionCount_Implementation(int32 Amount) override;
 	/** end Combat Interface */
 
 	//RPC处理所有端的死亡
@@ -115,6 +117,9 @@ protected:
 	//死亡音效
 	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="Combat")
 	USoundBase* DeathSound;
+
+	/* Minions */
+	int32 MinionCount = 0;
 
 private:
 	//初始Abilities列表
