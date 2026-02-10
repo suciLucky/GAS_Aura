@@ -54,7 +54,7 @@ public:
 
 	//生命周期
 	UPROPERTY(EditAnywhere,BlueprintReadOnly,Category="Combat")
-	float LifeSpan = 5.f;
+	float EnemyLifeSpan = 2.f;
 
 	//攻击目标
 	UPROPERTY(BlueprintReadWrite,Category="Combat")

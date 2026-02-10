@@ -15,8 +15,6 @@ void UAuraAssetManager::StartInitialLoading()
 {
 	Super::StartInitialLoading();
 	FAuraGameplayTags::InitializeNativeGameplayTags();
-	// 添加这行日志
-	UE_LOG(LogTemp, Error, TEXT("====== AuraAssetManager::StartInitialLoading() CALLED ======"));
-	//重要：使用TargetData的必须项
+   //重要：使用TargetData的必须项
 	UAbilitySystemGlobals::Get().InitGlobalData();
 }
