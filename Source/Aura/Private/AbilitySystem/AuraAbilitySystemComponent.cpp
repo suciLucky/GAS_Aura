@@ -22,6 +22,8 @@ void UAuraAbilitySystemComponent::AddCharacterAbilities(const TArray<TSubclassOf
 			GiveAbility(AbilitySpec);
 		}		
 	}
+	bStartupAbilitiesGiven = true;
+	AbilitiesGivenDelegate.Broadcast(this);
 }
 
 //激活匹配标签的技能并通知已按下

@@ -50,21 +50,39 @@ void UOverlayWidgetController::BindCallbacksToDependencies()
         }
 	);	
 
-	//使用Lambda表达式作为回调函数
-	Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent)->EffectAssetTags.AddLambda(
-    [this](const FGameplayTagContainer& AssetTagContainer)
-    {
-    	for(auto Tag:AssetTagContainer)
-    	{
-    		//寻找Message类型的Tag
-    		if(Tag.MatchesTag(FGameplayTag::RequestGameplayTag(FName("Message"))))
-    		{
-    			//使用该Tag从数据表找特定行，然后广播
-    			const FUIWidgetRow* Row=GetDatatableRowByTag<FUIWidgetRow>(MessageWidgetDataTable,Tag);
-    			MessageWidgetRowDelegate.Broadcast(*Row);
-    		}  		
-    	
-    	}
+	if(UAuraAbilitySystemComponent* AuraASC = Cast<UAuraAbilitySystemComponent>(AbilitySystemComponent))
+	{
+		//绑定初始技能委托的回调函数
+		if(AuraASC->bStartupAbilitiesGiven) OnInitializeStartupAbilities(AuraASC);
+		else
+		{
+			AuraASC->AbilitiesGivenDelegate.AddUObject(this,&UOverlayWidgetController::OnInitializeStartupAbilities);
+		}
+		
+		//使用Lambda表达式作为回调函数
+        	AuraASC->EffectAssetTags.AddLambda(
+            [this](const FGameplayTagContainer& AssetTagContainer)
+            {
+            	for(auto Tag:AssetTagContainer)
+            	{
+            		//寻找Message类型的Tag
+            		if(Tag.MatchesTag(FGameplayTag::RequestGameplayTag(FName("Message"))))
+            		{
+            			//使用该Tag从数据表找特定行，然后广播
+            			const FUIWidgetRow* Row=GetDatatableRowByTag<FUIWidgetRow>(MessageWidgetDataTable,Tag);
+            			MessageWidgetRowDelegate.Broadcast(*Row);
+            		}  		
+            	
+            	}
+        	
+            });	
+	}	
 	
-    });	
+}
+
+void UOverlayWidgetController::OnInitializeStartupAbilities(UAuraAbilitySystemComponent* AuraAbilitySystemComponent)
+{
+	if(!AuraAbilitySystemComponent->bStartupAbilitiesGiven) return;
+
+	
 }

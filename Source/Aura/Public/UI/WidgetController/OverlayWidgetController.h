@@ -3,6 +3,8 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "AbilitySystem/AuraAbilitySystemComponent.h"
+#include "AbilitySystem/Data/AbilityInfo.h"
 #include "UI/Widget/AuraUserWidget.h"
 #include "UI/WidgetController/AuraWidgetController.h"
 #include "OverlayWidgetController.generated.h"
@@ -64,9 +66,16 @@ protected:
 	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly,Category="Widget Data")
 	TObjectPtr<UDataTable> MessageWidgetDataTable;
 
+	//UI里的技能信息
+	UPROPERTY(EditDefaultsOnly,BlueprintReadOnly,Category="Widget Data")
+	TObjectPtr<UAbilityInfo> AbilityInfo;
+
 	//通过Tag获取任意数据表格行的模板函数
 	template<typename T>
-	T* GetDatatableRowByTag(UDataTable*DataTable,const FGameplayTag& Tag);	
+	T* GetDatatableRowByTag(UDataTable*DataTable,const FGameplayTag& Tag);
+
+	//初始技能委托绑定的回调函数
+	void OnInitializeStartupAbilities(UAuraAbilitySystemComponent* AuraAbilitySystemComponent);
 };
 
 template <typename T>

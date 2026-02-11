@@ -8,6 +8,8 @@
 
 
 DECLARE_MULTICAST_DELEGATE_OneParam(FEffectAssetTags,const FGameplayTagContainer& /*AssetTags*/)
+DECLARE_MULTICAST_DELEGATE_OneParam(FAbilitiesGiven,UAuraAbilitySystemComponent*)
+
 /**
  * 
  */
@@ -21,6 +23,12 @@ public:
 
 	//广播AssetTags的委托
 	FEffectAssetTags EffectAssetTags;
+
+	//广播初始技能的委托
+	FAbilitiesGiven AbilitiesGivenDelegate;
+
+	//判断是否技能已就绪
+	bool bStartupAbilitiesGiven = false;
 
 	//添加初始技能和初始输入标签
 	void AddCharacterAbilities(const TArray<TSubclassOf<UGameplayAbility>>& StartupAbilities);
