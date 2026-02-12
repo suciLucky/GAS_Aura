@@ -7,8 +7,9 @@
 #include "AuraAbilitySystemComponent.generated.h"
 
 
-DECLARE_MULTICAST_DELEGATE_OneParam(FEffectAssetTags,const FGameplayTagContainer& /*AssetTags*/)
-DECLARE_MULTICAST_DELEGATE_OneParam(FAbilitiesGiven,UAuraAbilitySystemComponent*)
+DECLARE_MULTICAST_DELEGATE_OneParam(FEffectAssetTags,const FGameplayTagContainer& /*AssetTags*/);
+DECLARE_MULTICAST_DELEGATE_OneParam(FAbilitiesGiven,UAuraAbilitySystemComponent*);
+DECLARE_DELEGATE_OneParam(FForEachAbility,const FGameplayAbilitySpec&);
 
 /**
  * 
@@ -36,10 +37,19 @@ public:
 	//按下、松开时触发的函数，接受InputTag
 	void AbilityInputTagHeld(const FGameplayTag& InputTag);
 	void AbilityInputTagReleased(const FGameplayTag& InputTag);
+
+	void ForEachAbility(const FForEachAbility& Delegate);
+
+	//从Spec获取该Ability的Tag
+	static FGameplayTag GetAbilityTagFromSpec(const FGameplayAbilitySpec& AbilitySpec);
+	//从Spec获取该Ability的InputTag
+	static FGameplayTag GetInputTagFromSpec(const FGameplayAbilitySpec& AbilitySpec);
 protected:
 
 	//GE生效时的Client RPC回调函数，通过多播委托绑定
 	UFUNCTION(Client,Reliable)
 	void ClientEffectApplied( UAbilitySystemComponent*AbilitySystemComponent, const FGameplayEffectSpec&EffectSpec, FActiveGameplayEffectHandle ActiveEffectHandle)const;
-	
+
+	//在技能被复制时也触发广播
+	virtual void OnRep_ActivateAbilities() override;
 };
