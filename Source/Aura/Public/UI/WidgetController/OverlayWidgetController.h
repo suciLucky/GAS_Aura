@@ -61,6 +61,9 @@ public:
 
 	UPROPERTY(BlueprintAssignable,Category="GAS|Messages")
 	FAbilityInfoSignature AbilityInfoDelegate;
+
+	UPROPERTY(BlueprintAssignable,Category="GAS|XP")
+	FOnAttributeChangedSignature OnXPPercentChangedDelegate;
 	
 	virtual void BindCallbacksToDependencies() override;
 protected:
@@ -79,6 +82,8 @@ protected:
 
 	//初始技能委托绑定的回调函数
 	void OnInitializeStartupAbilities(UAuraAbilitySystemComponent* AuraAbilitySystemComponent);
+
+	void OnXPChanged(const int32 NewXP)const;
 };
 
 template <typename T>
