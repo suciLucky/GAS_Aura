@@ -33,6 +33,7 @@ public:
 
 	//添加初始技能和初始输入标签
 	void AddCharacterAbilities(const TArray<TSubclassOf<UGameplayAbility>>& StartupAbilities);
+	void AddCharacterPassiveAbilities(const TArray<TSubclassOf<UGameplayAbility>>& StartupPassiveAbilities);
 
 	//按下、松开时触发的函数，接受InputTag
 	void AbilityInputTagHeld(const FGameplayTag& InputTag);
@@ -44,6 +45,11 @@ public:
 	static FGameplayTag GetAbilityTagFromSpec(const FGameplayAbilitySpec& AbilitySpec);
 	//从Spec获取该Ability的InputTag
 	static FGameplayTag GetInputTagFromSpec(const FGameplayAbilitySpec& AbilitySpec);
+
+	//在服务器上加点更改属性值	
+	void UpgradeAttribute(const FGameplayTag& AttributeTag);
+	UFUNCTION(Server,Reliable)
+	void ServerUpgradeAttribute(const FGameplayTag& AttributeTag);
 protected:
 
 	//GE生效时的Client RPC回调函数，通过多播委托绑定

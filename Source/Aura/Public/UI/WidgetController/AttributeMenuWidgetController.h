@@ -23,6 +23,16 @@ public:
 
 	UPROPERTY(BlueprintAssignable,Category="GAS|Attributes")
 	FAttributeInfoSignature AttributeInfoDelegate;
+
+	UPROPERTY(BlueprintAssignable,Category="GAS|AttributePoints")
+	FOnPlayerStateChangedSignature AttributePointsChangedDelegate;
+
+	UPROPERTY(BlueprintAssignable,Category="GAS|SpellPoints")
+	FOnPlayerStateChangedSignature SpellPointsChangedDelegate;
+
+	//加点更改属性值
+	UFUNCTION(BlueprintCallable)
+	void UpgradeAttribute(const FGameplayTag& AttributeTag);
 	
 protected:
 	//蓝图中添加

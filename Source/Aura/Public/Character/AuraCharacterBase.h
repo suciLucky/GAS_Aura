@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "AbilitySystem/AuraAbilitySystemComponent.h"
 #include "AbilitySystemInterface.h"
+#include "AbilitySystem/Data/CharacterClassInfo.h"
 #include "GameFramework/Character.h"
 #include "Interaction/CombatInterface.h"
 #include "AuraCharacterBase.generated.h"
@@ -35,6 +36,7 @@ public:
 	virtual FTaggedMontage GetTaggedMontageByTag_Implementation(const FGameplayTag& MontageTag) override;
 	int32 GetMinionCount_Implementation() override;
 	void IncrementMinionCount_Implementation(int32 Amount) override;
+	virtual ECharacterClass GetCharacterClass_Implementation() override;
 	/** end Combat Interface */
 
 	//RPC处理所有端的死亡
@@ -121,10 +123,18 @@ protected:
 	/* Minions */
 	int32 MinionCount = 0;
 
+	//角色种类
+	UPROPERTY(EditAnywhere, BlueprintReadOnly,Category="Character Class Default")
+	ECharacterClass CharacterClass = ECharacterClass::Warrior;
+
 private:
 	//初始Abilities列表
 	UPROPERTY(EditAnywhere, Category="Abilities")
 	TArray<TSubclassOf<UGameplayAbility>> StartupAbilities;
+
+	//初始PassiveAbilities列表
+	UPROPERTY(EditAnywhere, Category="Abilities")
+	TArray<TSubclassOf<UGameplayAbility>> StartupPassiveAbilities;
 
 	//受击蒙太奇
 	UPROPERTY(EditAnywhere, Category="Combat")

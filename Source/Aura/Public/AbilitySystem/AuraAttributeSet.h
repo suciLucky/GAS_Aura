@@ -73,6 +73,9 @@ public:
 	//GE生效后的执行函数，拥有所有相关数据
 	virtual void PostGameplayEffectExecute(const FGameplayEffectModCallbackData& Data) override;
 
+	//属性改变后的执行函数
+	virtual void PostAttributeChange(const FGameplayAttribute& Attribute, float OldValue, float NewValue) override;
+
 	//用来存储Tag映射GetAttribute()指针
 	TMap<FGameplayTag,TStaticFuncPtr<FGameplayAttribute()>> TagToAttribute;
 
@@ -89,6 +92,10 @@ public:
 	UPROPERTY(BlueprintReadOnly,Category="Meta Attributes")
 	FGameplayAttributeData IncomingDamage;
 	ATTRIBUTE_ACCESSORS(UAuraAttributeSet,IncomingDamage);
+
+	UPROPERTY(BlueprintReadOnly,Category="Meta Attributes")
+	FGameplayAttributeData IncomingXP;
+	ATTRIBUTE_ACCESSORS(UAuraAttributeSet,IncomingXP);
 
 	//Primary Attributes
 	UPROPERTY(BlueprintReadOnly,ReplicatedUsing=OnRep_Strength,Category="Primary Attributes")
@@ -235,6 +242,13 @@ private:
 	//设置GE相关变量，在PostGameplayEffectExecute()里执行
 	void static SetEffectProperties(const FGameplayEffectModCallbackData& Data,FEffectProperties& Props);
 	static void ShowFloatingText(const FEffectProperties& Props, const float Damage,const bool IsBlockedHit,const bool IsCriticalHit);
+
+	//发送获取经验事件
+	static void SendXPEvent(const FEffectProperties& Props);
+
+	//是否增加最大生命值（法力值）
+	bool bTopOffHeath = false;
+	bool bTopOffMana = false;
 };
 
 

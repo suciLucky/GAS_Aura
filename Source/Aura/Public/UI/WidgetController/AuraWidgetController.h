@@ -7,6 +7,8 @@
 #include "AbilitySystem/AuraAttributeSet.h"
 #include "AuraWidgetController.generated.h"
 
+//广播给蓝图里用的委托
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnPlayerStateChangedSignature,int32,NewValue);
 //Controller需要的变量的结构体，方便初始化
 USTRUCT(BlueprintType)
 struct FWidgetControllerParams

@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "AbilitySystem/Data/CharacterClassInfo.h"
 #include "AI/AuraAIController.h"
 #include "Character/AuraCharacterBase.h"
 #include "Components/WidgetComponent.h"
@@ -29,7 +28,7 @@ public:
 	/** end Enemy接口函数*/
 
 	/**Combat接口函数*/
-	virtual int32 GetPlayerLevel() override;
+	virtual int32 GetPlayerLevel_Implementation() override;
 	virtual void Die() override;
 	virtual void SetCombatTarget_Implementation(AActor* InCombatTarget) override;
 	virtual AActor* GetCombatTarget_Implementation() const override;
@@ -70,10 +69,7 @@ protected:
 	//等级
 	UPROPERTY(EditAnywhere, BlueprintReadOnly,Category="Character Class Default")
 	int32 Level=1;
-	//角色种类
-	UPROPERTY(EditAnywhere, BlueprintReadOnly,Category="Character Class Default")
-	ECharacterClass CharacterClass = ECharacterClass::Warrior;
-
+	
 	//敌人血条
 	UPROPERTY(VisibleAnywhere,BlueprintReadOnly)
 	TObjectPtr<UWidgetComponent> EnemyHealthBar;

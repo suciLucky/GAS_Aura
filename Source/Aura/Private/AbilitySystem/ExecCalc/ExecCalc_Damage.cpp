@@ -3,7 +3,6 @@
 
 #include "AbilitySystem/ExecCalc/ExecCalc_Damage.h"
 #include "AbilitySystemComponent.h"
-#include "AuraAbilityTypes.h"
 #include "AuraGameplayTags.h"
 #include "AbilitySystem/AuraAbilitySystemLibrary.h"
 #include "AbilitySystem/AuraAttributeSet.h"
@@ -89,8 +88,14 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 
 	AActor* SourceAvatar = SourceASC ? SourceASC->GetAvatarActor() : nullptr;
 	AActor* TargetAvatar = TargetASC ? TargetASC->GetAvatarActor() : nullptr;
-	ICombatInterface* SourceCombatInterface = Cast<ICombatInterface>(SourceAvatar);
-	ICombatInterface* TargetCombatInterface = Cast<ICombatInterface>(TargetAvatar);
+
+	int32 SourcePlayerLevel = 1;
+	if(SourceAvatar->Implements<UCombatInterface>())
+		SourcePlayerLevel = ICombatInterface::Execute_GetPlayerLevel(SourceAvatar);
+
+	int32 TargetPlayerLevel = 1;
+	if(TargetAvatar->Implements<UCombatInterface>())
+		TargetPlayerLevel = ICombatInterface::Execute_GetPlayerLevel(TargetAvatar);		
 	
 	const FGameplayEffectSpec& Spec = ExecutionParams.GetOwningSpec();
 
@@ -146,11 +151,11 @@ void UExecCalc_Damage::Execute_Implementation(const FGameplayEffectCustomExecuti
 	//获取计算系数
 	const UCharacterClassInfo* CharacterClassInfo = UAuraAbilitySystemLibrary::GetCharacterClassInfo(SourceAvatar);
 	const FRealCurve* ArmorPenetrationCoeCurve =  CharacterClassInfo->DamageCalculationCoefficients->FindCurve(FName("ArmorPenetrationCoe"),FString());
-	const float ArmorPenetrationCoefficient = ArmorPenetrationCoeCurve->Eval(SourceCombatInterface->GetPlayerLevel());
+	const float ArmorPenetrationCoefficient = ArmorPenetrationCoeCurve->Eval(SourcePlayerLevel);
 	const FRealCurve*EffectiveArmorCoeCurve = CharacterClassInfo->DamageCalculationCoefficients->FindCurve(FName("EffectiveArmorCoe"),FString());
-	const float EffectiveArmorCoefficient = EffectiveArmorCoeCurve->Eval(TargetCombatInterface->GetPlayerLevel());
+	const float EffectiveArmorCoefficient = EffectiveArmorCoeCurve->Eval(TargetPlayerLevel);
 	const FRealCurve*CriticalHitResistanceCoeCurve = CharacterClassInfo->DamageCalculationCoefficients->FindCurve(FName("CriticalHitResistanceCoe"),FString());
-	const float CriticalHitResistanceCoefficient = CriticalHitResistanceCoeCurve->Eval(TargetCombatInterface->GetPlayerLevel());
+	const float CriticalHitResistanceCoefficient = CriticalHitResistanceCoeCurve->Eval(TargetPlayerLevel);
     
 	//捕获源暴击率
 	float SourceCriticalHitChance = 0.f;

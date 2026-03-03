@@ -4,6 +4,7 @@
 #include "UI/WidgetController/AttributeMenuWidgetController.h"
 
 #include "AuraGameplayTags.h"
+#include "Player/AuraPlayerState.h"
 
 void UAttributeMenuWidgetController::BroadcastInitialValues()
 {
@@ -14,11 +15,14 @@ void UAttributeMenuWidgetController::BroadcastInitialValues()
 	{
 		BroadcastAttributeInfo(Pair.Key,Pair.Value());
 	}
-	
+
+	const AAuraPlayerState* AuraPlayerState = CastChecked<AAuraPlayerState>(PlayerState);
+	AttributePointsChangedDelegate.Broadcast(AuraPlayerState->GetAttributePoints());
+	SpellPointsChangedDelegate.Broadcast(AuraPlayerState->GetSpellPoints());	
 }
 
 void UAttributeMenuWidgetController::BindCallbacksToDependencies()
-{
+{	
 	UAuraAttributeSet*AS = CastChecked<UAuraAttributeSet>(AttributeSet);
 	check(AttributeInfo);
 	//属性改变时继续广播
@@ -31,10 +35,32 @@ void UAttributeMenuWidgetController::BindCallbacksToDependencies()
 			}
 		);
 	}
+
+	//将PlayerState的委托绑定到回调函数
+	AAuraPlayerState* AuraPlayerState = CastChecked<AAuraPlayerState>(PlayerState);
+
+	AuraPlayerState->OnAttributePointsChangedDelegate.AddLambda(
+	[this](int32 NewAttributePoints)
+	{
+		AttributePointsChangedDelegate.Broadcast(NewAttributePoints);
+	}
+	);
+	AuraPlayerState->OnSpellPointsChangedDelegate.AddLambda(
+	[this](int32 NewSpellPoints)
+	{
+		SpellPointsChangedDelegate.Broadcast(NewSpellPoints);
+	}
+	);
+}
+
+void UAttributeMenuWidgetController::UpgradeAttribute(const FGameplayTag& AttributeTag)
+{
+	UAuraAbilitySystemComponent* AuraAbilitySystemComponent = CastChecked<UAuraAbilitySystemComponent>(AbilitySystemComponent);
+	AuraAbilitySystemComponent->UpgradeAttribute(AttributeTag);
 }
 
 void UAttributeMenuWidgetController::BroadcastAttributeInfo(const FGameplayTag& GameplayTag,
-	const FGameplayAttribute& GameplayAttribute) const
+                                                            const FGameplayAttribute& GameplayAttribute) const
 {
 	FAuraAttributeInfo Info=AttributeInfo->FindAttributeInfoForTag(GameplayTag);
 	Info.AttributeValue=GameplayAttribute.GetNumericValue(AttributeSet);

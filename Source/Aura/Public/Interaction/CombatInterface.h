@@ -45,11 +45,14 @@ class AURA_API ICombatInterface
 	// Add interface functions to this class. This is the class that will be inherited to implement this interface.
 public:
 
-	virtual int32 GetPlayerLevel();
+	//获取等级
+	UFUNCTION(BlueprintNativeEvent,BlueprintCallable)
+	int32 GetPlayerLevel();
 
 	//获取插槽位置
 	UFUNCTION(BlueprintNativeEvent,BlueprintCallable)
 	FVector GetCombatSocketLocation(const FGameplayTag& SocketTag);
+	
 	//更新朝向目标位置
 	UFUNCTION(BlueprintImplementableEvent,BlueprintCallable)
 	void UpdateFacingTarget(const FVector& Target);
@@ -87,4 +90,8 @@ public:
 	//设置仆从数量
 	UFUNCTION(BlueprintNativeEvent,BlueprintCallable)
 	void IncrementMinionCount(int32 Amount);
+
+	//获取角色类型
+	UFUNCTION(BlueprintNativeEvent,BlueprintCallable)
+	ECharacterClass GetCharacterClass();
 };

@@ -64,6 +64,10 @@ public:
 
 	UPROPERTY(BlueprintAssignable,Category="GAS|XP")
 	FOnAttributeChangedSignature OnXPPercentChangedDelegate;
+
+	UPROPERTY(BlueprintAssignable,Category="GAS|Level")
+	FOnPlayerStateChangedSignature OnPlayerLevelChangedDelegate;
+	
 	
 	virtual void BindCallbacksToDependencies() override;
 protected:

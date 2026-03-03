@@ -22,7 +22,7 @@ public:
 	static UOverlayWidgetController*GetOverlayWidgetController(const UObject*WorldContextObject);
 
 	UFUNCTION(BlueprintPure,Category="AuraAbilitySystemLibrary|WidgetController")
-	static UAttributeMenuWidgetController*GetaAttributeMenuWidgetController(const UObject*WorldContextObject);
+	static UAttributeMenuWidgetController*GetAttributeMenuWidgetController(const UObject*WorldContextObject);
 
 	//使用角色种类和等级初始化角色信息
 	UFUNCTION(BlueprintCallable,Category="AuraAbilitySystemLibrary|CharacterClassDefaults")
@@ -57,4 +57,7 @@ public:
 	//判断两者是否一个阵营
 	UFUNCTION(BlueprintPure,Category="AuraAbilitySystemLibrary|GameplayMechanic")
 	static bool IsNotFriend(AActor* FirstActor,AActor* SecondActor);
+
+	//根据角色类型和他的等级获取可获得的经验值
+	static int32 GetXPRewardForClassAndLevel(const UObject*WorldContextObject,ECharacterClass CharacterClass,int32 CharacterLevel);
 };
