@@ -10,41 +10,55 @@
 #include "Player/AuraPlayerState.h"
 #include "UI/HUD/AuraHUD.h"
 
-UOverlayWidgetController* UAuraAbilitySystemLibrary::GetOverlayWidgetController(const UObject* WorldContextObject)
-{	
-	if(APlayerController*PC = UGameplayStatics::GetPlayerController(WorldContextObject,0))
-	{
-		if(AAuraHUD*AuraHUD = Cast<AAuraHUD>(PC->GetHUD()))
-		{
-			AAuraPlayerState*PS=PC->GetPlayerState<AAuraPlayerState>();
-			UAbilitySystemComponent*ASC=PS->GetAbilitySystemComponent();
-			UAttributeSet*AS=PS->GetAttributeSet();
-			const FWidgetControllerParams WidgetControllerParams(PC,PS,ASC,AS);
-			return AuraHUD->GetOverlayWidgetController(WidgetControllerParams);
-		}
-	}
-	return nullptr;
-}
-
-UAttributeMenuWidgetController* UAuraAbilitySystemLibrary::GetAttributeMenuWidgetController(
-	const UObject* WorldContextObject)
+bool UAuraAbilitySystemLibrary::MakeWidgetControllerPrams(const UObject* WorldContextObject,FWidgetControllerParams& OutWCPrams,AAuraHUD* & OutAuraHUD)
 {
 	if(APlayerController*PC = UGameplayStatics::GetPlayerController(WorldContextObject,0))
 	{
-		if(AAuraHUD*AuraHUD = Cast<AAuraHUD>(PC->GetHUD()))
+		OutAuraHUD = Cast<AAuraHUD>(PC->GetHUD());
+		if(OutAuraHUD)
 		{
 			AAuraPlayerState*PS=PC->GetPlayerState<AAuraPlayerState>();
 			UAbilitySystemComponent*ASC=PS->GetAbilitySystemComponent();
 			UAttributeSet*AS=PS->GetAttributeSet();
-			const FWidgetControllerParams WidgetControllerParams(PC,PS,ASC,AS);
-			return AuraHUD->GetAttributeMenuWidgetController(WidgetControllerParams);
+			OutWCPrams.AttributeSet = AS;
+			OutWCPrams.PlayerController = PC;
+			OutWCPrams.PlayerState = PS;
+			OutWCPrams.AbilitySystemComponent = ASC;
+			return true;
 		}
 	}
+	return false;
+}
+
+UOverlayWidgetController* UAuraAbilitySystemLibrary::GetOverlayWidgetController(const UObject* WorldContextObject)
+{
+	FWidgetControllerParams WCPrams;
+	AAuraHUD* OutAuraHUD = nullptr ;
+	if(MakeWidgetControllerPrams(WorldContextObject,WCPrams,OutAuraHUD))	
+		return OutAuraHUD->GetOverlayWidgetController(WCPrams);	
+	return nullptr;
+}
+
+UAttributeMenuWidgetController* UAuraAbilitySystemLibrary::GetAttributeMenuWidgetController(const UObject* WorldContextObject)
+{
+	FWidgetControllerParams WCPrams;
+	AAuraHUD* OutAuraHUD = nullptr ;
+	if(MakeWidgetControllerPrams(WorldContextObject,WCPrams,OutAuraHUD))	
+		return OutAuraHUD->GetAttributeMenuWidgetController(WCPrams);	
+	return nullptr;	
+}
+
+USpellMenuWidgetController* UAuraAbilitySystemLibrary::GetSpellMenuWidgetController(const UObject* WorldContextObject)
+{
+	FWidgetControllerParams WCPrams;
+	AAuraHUD* OutAuraHUD = nullptr ;
+	if(MakeWidgetControllerPrams(WorldContextObject,WCPrams,OutAuraHUD))	
+		return OutAuraHUD->GetSpellMenuWidgetController(WCPrams);	
 	return nullptr;
 }
 
 void UAuraAbilitySystemLibrary::InitializeDefaultAttributes(const UObject*WorldContextObject,const ECharacterClass CharacterClass,
-	const float Level,UAbilitySystemComponent*ASC)
+                                                            const float Level,UAbilitySystemComponent*ASC)
 {
 	//获取角色数据
 	UCharacterClassInfo* CharacterClassInfo = GetCharacterClassInfo(WorldContextObject);

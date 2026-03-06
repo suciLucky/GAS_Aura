@@ -7,6 +7,7 @@
 #include "UI/Widget/AuraUserWidget.h"
 #include "UI/WidgetController/AttributeMenuWidgetController.h"
 #include "UI/WidgetController/OverlayWidgetController.h"
+#include "UI/WidgetController/SpellMenuWidgetController.h"
 #include "AuraHUD.generated.h"
 
 /**
@@ -21,6 +22,8 @@ public:
 	UOverlayWidgetController*GetOverlayWidgetController(const FWidgetControllerParams& WCParams);
 	//创建AttributeMenu的Controller
 	UAttributeMenuWidgetController*GetAttributeMenuWidgetController(const FWidgetControllerParams& WCParams);
+	//创建SpellMenu的Controller
+	USpellMenuWidgetController*GetSpellMenuWidgetController(const FWidgetControllerParams& WCParams);
 	
 	//初始化widget和其controller
 	void InitOverlay(APlayerController*PC,APlayerState*PS,UAbilitySystemComponent*ASC,UAttributeSet*AS);
@@ -39,9 +42,14 @@ private:
 	TSubclassOf<UOverlayWidgetController> OverlayWidgetControllerClass;	
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<UAttributeMenuWidgetController> AttributeMenuWidgetControllerClass;
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<USpellMenuWidgetController> SpellMenuWidgetControllerClass;
+	
 	//已创建的有效的Controller变量
 	UPROPERTY()
 	TObjectPtr<UOverlayWidgetController> OverlayWidgetController;
 	UPROPERTY()
 	TObjectPtr<UAttributeMenuWidgetController> AttributeMenuWidgetController;
+	UPROPERTY()
+	TObjectPtr<USpellMenuWidgetController>SpellMenuWidgetController;
 };

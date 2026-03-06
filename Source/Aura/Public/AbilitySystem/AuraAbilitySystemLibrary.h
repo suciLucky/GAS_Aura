@@ -5,8 +5,10 @@
 #include "CoreMinimal.h"
 #include "Data/CharacterClassInfo.h"
 #include "Kismet/BlueprintFunctionLibrary.h"
+#include "UI/HUD/AuraHUD.h"
 #include "UI/WidgetController/AttributeMenuWidgetController.h"
 #include "UI/WidgetController/OverlayWidgetController.h"
+#include "UI/WidgetController/SpellMenuWidgetController.h"
 #include "AuraAbilitySystemLibrary.generated.h"
 
 /**
@@ -18,11 +20,17 @@ class AURA_API UAuraAbilitySystemLibrary : public UBlueprintFunctionLibrary
 	GENERATED_BODY()
 
 public:
-	UFUNCTION(BlueprintPure,Category="AuraAbilitySystemLibrary|WidgetController")
+	UFUNCTION(BlueprintPure,Category="AuraAbilitySystemLibrary|WidgetController",meta = (DefaultToSelf = "WorldContextObject"))
+	static bool MakeWidgetControllerPrams(const UObject*WorldContextObject,FWidgetControllerParams& OutWCPrams,AAuraHUD* & OutAuraHUD);
+	
+	UFUNCTION(BlueprintPure,Category="AuraAbilitySystemLibrary|WidgetController",meta = (DefaultToSelf = "WorldContextObject"))
 	static UOverlayWidgetController*GetOverlayWidgetController(const UObject*WorldContextObject);
 
-	UFUNCTION(BlueprintPure,Category="AuraAbilitySystemLibrary|WidgetController")
+	UFUNCTION(BlueprintPure,Category="AuraAbilitySystemLibrary|WidgetController",meta = (DefaultToSelf = "WorldContextObject"))
 	static UAttributeMenuWidgetController*GetAttributeMenuWidgetController(const UObject*WorldContextObject);
+
+	UFUNCTION(BlueprintPure,Category="AuraAbilitySystemLibrary|WidgetController",meta = (DefaultToSelf = "WorldContextObject"))
+	static USpellMenuWidgetController*GetSpellMenuWidgetController(const UObject*WorldContextObject);
 
 	//使用角色种类和等级初始化角色信息
 	UFUNCTION(BlueprintCallable,Category="AuraAbilitySystemLibrary|CharacterClassDefaults")
